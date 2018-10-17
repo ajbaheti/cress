@@ -5,9 +5,6 @@ angular.module('CressApp')
     	console.log('Isolates ctrl called');
 
         $scope.showMenu = AuthService.isLoggedIn();
-        if(!$scope.showMenu){
-            $location.path('/login');
-        }
         $scope.currentNavItem = 'isolates';
         $scope.isAdmin = AuthService.user.isAdmin;
 
