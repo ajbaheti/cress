@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('CressApp')
-	.controller('HomeCtrl', function ($scope, $location, $mdMenu, $mdDialog, AuthService, StudyService) {
+	.controller('HomeCtrl', function ($scope, $location, $mdMenu, $mdDialog, AuthService, StudyService, PatientService) {
     	console.log('Home ctrl called');
 
         $scope.showMenu = AuthService.isLoggedIn();
@@ -24,6 +24,10 @@ angular.module('CressApp')
         /*$scope.goTo = function(path) {
             $location.path('/'+path);
         };*/
+
+        $scope.goToHome = function() {
+            $location.path('/');
+        };
 
         $scope.logOut = function() {
     		AuthService.logOut();
@@ -53,6 +57,17 @@ angular.module('CressApp')
         $scope.onStudyChange = function() {
         	console.log($scope.selectedStudy);
             StudyService.selectedStudy = $scope.selectedStudy;
+
+            StudyService
+				.getPatientsForStudy(StudyService.selectedStudy.study_id)
+				.then(function(patients){
+					console.log(patients);
+					PatientService.patientList = patients;
+					$location.path('/patients');
+				})
+				.catch(function(err){
+					console.log(err);
+				})
 		}
 
 });

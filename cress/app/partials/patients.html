@@ -1,6 +1,8 @@
 <div>
     <md-toolbar class="md-primary" layout="row" md-whiteframe="2">
-        <div style="text-align:center;padding:16px;margin-left:8px;">ROCHESTER INSTITUTE OF TECHNOLOGY</div>
+        <md-icon class="material-icons" ng-click="goToHome()"
+            style="margin-left:8px;cursor:pointer;outline:none;">home</md-icon>
+        <div style="text-align:center;padding:16px;">ROCHESTER INSTITUTE OF TECHNOLOGY</div>
         <div flex></div>
         <md-menu ng-if="showMenu" style="padding: 16px;outline:none;cursor:pointer;">
             <md-icon aria-label="Open menu" class="md-raised md-primary" ng-click="openMenu($mdMenu, $event)">menu
@@ -15,6 +17,7 @@
             </md-menu-content>
         </md-menu>
     </md-toolbar>
+
     <md-content>
         <md-nav-bar md-no-ink-bar="disableInkBar" md-selected-nav-item="currentNavItem"
                     nav-bar-aria-label="navigation links">
@@ -36,6 +39,62 @@
         </md-nav-bar>
     </md-content>
 
-    Patients
+    <md-content class="md-padding">
+        <div class="section" md-whiteframe="1" layout="column">
+            <md-toolbar md-colors="{'color':'grey-700'}" style="background-color: transparent">
+                <div class="md-toolbar-tools">
+                    <div layout="column" flex>
+                        <h2>Patient Information</h2>
+                        <div class="md-caption" style="padding-bottom: 0;">Find or create patient.</div>
+                    </div>
+                </div>
+            </md-toolbar>
+            <div layout="row" style="padding:8px;margin-top: 0">
+                <md-button class="md-primary md-raised" ng-click="editPatient = !editPatient">
+                    Edit Existing Patient</md-button>
+                <md-button class="md-primary md-raised" ng-click="editPatient = !editPatient">
+                    Enter New Patient</md-button>
+            </div>
+        </div>
+    </md-content>
 
+    <md-content class="md-padding" ng-if="editPatient">
+        <div class="section" md-whiteframe="1" layout="column">
+            <md-toolbar md-colors="{'color':'grey-700'}" style="background-color: transparent">
+                <div class="md-toolbar-tools">
+                    <div layout="column" flex>
+                        <h2>Select Patient</h2>
+                        <div class="md-caption" style="padding-bottom: 0;">Select a patient to get more information.</div>
+                    </div>
+                </div>
+            </md-toolbar>
+            <div layout="row" style="padding:8px;margin-top: 0">
+                <md-input-container flex="50" style="margin-left:8px;">
+                    <label>Patient Id</label>
+                    <md-select ng-model="selectedPatient" ng-model-options="{trackBy: '$value.patient_id'}"
+                               ng-change="onPatientSelect()">
+                        <md-option ng-repeat="patient in patients" ng-value="patient">
+                            {{patient.patient_id}}
+                        </md-option>
+                    </md-select>
+                </md-input-container>
+            </div>
+        </div>
+    </md-content>
+
+    <md-content class="md-padding" ng-if="!editPatient">
+        <div class="section" md-whiteframe="1" layout="column">
+            <md-toolbar md-colors="{'color':'grey-700'}" style="background-color: transparent">
+                <div class="md-toolbar-tools">
+                    <div layout="column" flex>
+                        <h2>Create Patient</h2>
+                        <div class="md-caption" style="padding-bottom: 0;">Create new patient.</div>
+                    </div>
+                </div>
+            </md-toolbar>
+            <div layout="row" style="padding:8px;margin-top: 0">
+
+            </div>
+        </div>
+    </md-content>
 </div>

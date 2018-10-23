@@ -31,6 +31,14 @@ cressApp.config(function($routeProvider) {
             }
 	    })
 
+        .when('/patient-info', {
+            templateUrl: 'app/partials/patient-info.html',
+            controller: 'PatientInfoCtrl',
+            resolve: {
+                User: CURRENT_USER_RESOLVER
+            }
+        })
+
 	    .when('/isolates', {
 	    	templateUrl : 'app/partials/isolates.html',
 	        controller: 'IsolatesCtrl',

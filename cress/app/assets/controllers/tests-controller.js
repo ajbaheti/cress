@@ -15,6 +15,10 @@ angular.module('CressApp')
             $location.path('/'+path);
         };
 
+        $scope.goToHome = function() {
+            $location.path('/');
+        };
+
         $scope.logOut = function() {
             AuthService.logOut();
             $location.path('/login');
