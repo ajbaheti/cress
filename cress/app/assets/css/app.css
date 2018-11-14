@@ -2,3 +2,47 @@
     margin-bottom: 16px;
     background: white;
 }
+
+.sticky-header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.sticky-tabs {
+    position: sticky;
+    top: 56px;
+    z-index: 10;
+}
+
+.hide-validation-error .md-errors-spacer {
+    display: none;
+}
+
+.label-overflow {
+    overflow: visible !important;
+    white-space: normal !important;
+    text-overflow: initial !important;
+}
+
+.admin-tabs-heading {
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 32px;
+}
+
+.md-datepicker-button {
+    margin-left: 0 !important;
+    padding-left: 0 !important;
+    margin-right: 0 !important;
+}
+
+.md-datepicker-button md-icon {
+    margin-left: 0 !important;
+}
+
+.grouping_header {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 14px;
+}

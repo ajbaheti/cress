@@ -1,43 +1,5 @@
 <div>
-    <md-toolbar class="md-primary" layout="row" md-whiteframe="2">
-        <md-icon class="material-icons" ng-click="goToHome()"
-            style="margin-left:8px;cursor:pointer;outline:none;">home</md-icon>
-        <div style="text-align:center;padding:16px;">ROCHESTER INSTITUTE OF TECHNOLOGY</div>
-        <div flex></div>
-        <md-menu ng-if="showMenu" style="padding: 16px;outline:none;cursor:pointer;">
-            <md-icon aria-label="Open menu" class="md-raised md-primary" ng-click="openMenu($mdMenu, $event)">menu
-            </md-icon>
-            <md-menu-content width="4">
-                <md-menu-item>
-                    <md-button ng-click="changePassword()">Change Password</md-button>
-                </md-menu-item>
-                <md-menu-item>
-                    <md-button ng-click="logOut()">Log Out</md-button>
-                </md-menu-item>
-            </md-menu-content>
-        </md-menu>
-    </md-toolbar>
-
-    <md-content>
-        <md-nav-bar md-no-ink-bar="disableInkBar" md-selected-nav-item="currentNavItem"
-                    nav-bar-aria-label="navigation links">
-            <md-nav-item md-nav-click="goTo('patients')" name="patients">
-                Patients
-            </md-nav-item>
-            <md-nav-item md-nav-click="goTo('isolates')" name="isolates">
-                Isolates
-            </md-nav-item>
-            <md-nav-item md-nav-click="goTo('tests')" name="tests">
-                Tests
-            </md-nav-item>
-            <md-nav-item md-nav-click="goTo('reports')" name="reports">
-                Reports
-            </md-nav-item>
-            <md-nav-item ng-if="isAdmin" md-nav-click="goTo('reports')" name="reports">
-                Admin
-            </md-nav-item>
-        </md-nav-bar>
-    </md-content>
+    <crd-toolbar current-nav-item="patients" show-tabs="true"></crd-toolbar>
 
     <md-content class="md-padding">
         <div class="section" md-whiteframe="1" layout="column">
@@ -71,8 +33,7 @@
             <div layout="row" style="padding:8px;margin-top: 0">
                 <md-input-container flex="50" style="margin-left:8px;">
                     <label>Patient Id</label>
-                    <md-select ng-model="selectedPatient" ng-model-options="{trackBy: '$value.patient_id'}"
-                               ng-change="onPatientSelect()">
+                    <md-select ng-model="selectedPatient" ng-change="onPatientSelect(selectedPatient)">
                         <md-option ng-repeat="patient in patients" ng-value="patient">
                             {{patient.patient_id}}
                         </md-option>

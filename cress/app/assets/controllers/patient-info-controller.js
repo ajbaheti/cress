@@ -1,79 +1,130 @@
 'use strict';
 
 angular.module('CressApp')
-    .controller('PatientInfoCtrl', function ($scope, $location, $mdMenu, $mdDialog, AuthService, PatientService, StudyService) {
-        console.log('Patients info ctrl called');
+    .controller('PatientInfoCtrl', function ($scope, $location, $mdMenu, $mdDialog, moment,
+                 StudyService, AuthService, PatientService, VisitService, RedirectPath) {
 
-        $scope.infoValArray = [];
-        $scope.showMenu = AuthService.isLoggedIn();
-        if(!$scope.showMenu){
-            $location.path('/login');
+        if(RedirectPath !== '/patient-info'){
+            $location.path(RedirectPath);
         }
-        $scope.currentNavItem = 'patients';
-        $scope.isAdmin = AuthService.user.isAdmin;
 
-        console.log(PatientService.selectedPatientId);
-        console.log(PatientService.currentPatientLabels);
+        // create an empty object for model (2-way binding)
+        $scope.patientInfoObj = {};
+        // default visit columns to display
+        $scope.visitColumns = [];
+        // empty visits array
+        $scope.visits = [];
+
+        //Assign drop down values object to the variable in scope
+        $scope.patientDropDownValues = PatientService.patientDropDownObjects;
+        // console.log("drop down values");
+        // console.log($scope.patientDropDownValues);
+
+        //get list of labels to be shown on left and right
+        $scope.leftLabelList = PatientService.currentPatientLabels.leftLabels;
+        $scope.rightLabelList = PatientService.currentPatientLabels.rightLabels;
+
+        // create an empty model for each field being displayed in html
+        $scope.leftLabelList.forEach(function(lbl){
+            $scope.patientInfoObj[''+lbl.db_field] = null;
+        });
+        $scope.rightLabelList.forEach(function(lbl){
+            $scope.patientInfoObj[''+lbl.db_field] = null;
+        });
+
+        // default visit columns to display
+        VisitService
+            .getDefaultVisitColumns()
+            .then(function(cols){
+                // console.log(cols);
+                if(cols !== 'Error finding visit columns'){
+                    $scope.visitColumns = cols;
+                } else {
+                    console.log("Error getting visit columns");
+                }
+            })
+            .catch(function(err){
+                console.log(err);
+                console.log("Error getting visit default columns");
+            });
+
+        //get selected patient information
         PatientService
             .getSinglePatientInfo(StudyService.selectedStudy.study_id, PatientService.selectedPatientId)
             .then(function(patient){
-                console.log(patient);
+                // console.log(patient);
+                if(patient.length > 0){
+                    // TODO: loop through left and right label list and find multi-select values
+                    // then assign model values in array
+                    $scope.patientInfoObj = patient[0];
+                } else {
+                    console.log("Patient information not found");
+                }
             })
             .catch(function(err){
                 console.log(err);
             });
 
-        PatientService.currentPatientLabels.forEach(function(obj){
-            var showTextField = false;
-            var showDateField = false;
-            var showSelectField = false;
-            switch(obj.label_type){
-                case 'single':
-                    showTextField = true;
-                    break;
-                case 'multiple':
-                    showSelectField = true;
-                    break;
-                case 'date':
-                    showDateField = true;
-                    break;
-            }
-            $scope.infoValArray.push({
-                showTextField: showTextField, showDateField: showDateField, showSelectField: showSelectField,
-                label: obj.label_text, isRequired: obj.is_required === 1
+        // get visits information for patient
+        VisitService
+            .getListOfVisits(PatientService.selectedPatientId)
+            .then(function(visits){
+                // console.log(visits);
+                if(visits === "No visits found"){
+                    $scope.visits = [];
+                } else {
+                    $scope.visits = visits;
+                }
+            })
+            .catch(function(err){
+                console.log(err);
             });
-        });
 
-        $scope.goTo = function(path) {
-            $location.path('/'+path);
+        $scope.savePatient = function() {
+            // console.log($scope.patientInfoObj);
+            var allRequiredEntered = true;
+            $scope.leftLabelList.forEach(function(lbl){
+                if(lbl.is_required === '1' && !$scope.patientInfoObj[''+lbl.db_field]) {
+                    allRequiredEntered = false;
+                }
+            });
+            $scope.rightLabelList.forEach(function(lbl){
+                if(lbl.is_required === '1' && !$scope.patientInfoObj[''+lbl.db_field]) {
+                    allRequiredEntered = false;
+                }
+            });
+            if(allRequiredEntered){
+                console.log("saving the patient");
+                PatientService
+                    .savePatient($scope.patientInfoObj)
+                    .then(function(data){
+                        console.log(data);
+                    })
+                    .catch(function(err){
+                        console.log("error in saving patient");
+                    });
+            }
+            else {
+                console.log("Enter all required fields");
+            }
         };
 
-        $scope.goToHome = function() {
-            $location.path('/');
-        };
-
-        $scope.logOut = function() {
-            AuthService.logOut();
-            $location.path('/login');
-        };
-
-        $scope.changePassword = function(ev) {
-
+        $scope.goToVisit = function(visit, ev) {
             $mdDialog.show({
-                controller: 'ChangePasswordCtrl',
-                templateUrl: 'app/partials/changePassword.html',
+                locals:{visitObject: visit},
+                templateUrl: 'app/partials/visit.html',
+                controller: 'VisitCtrl',
                 parent: angular.element(document.body),
                 targetEvent: ev,
                 clickOutsideToClose: false
             })
-                .then(function(answer) {
-                    $scope.status = 'You said the information was "' + answer + '".';
-                }, function() {
-                    $scope.status = 'You cancelled the dialog.';
-                });
+            .then(function(answer) {
+                if(answer === "SUCCESS"){
+                    console.log(answer);
+                }
+            }, function() {});
         };
 
-        $scope.openMenu = function($mdMenu, ev){
-            $mdMenu.open(ev);
-        };
+        //TODO - add activate things in function, so that it can be called on successful patient save
+        //TODO - create patient front-end/backend
     });

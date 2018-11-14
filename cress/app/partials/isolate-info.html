@@ -1,0 +1,94 @@
+<div>
+    <crd-toolbar current-nav-item="isolates" show-tabs="true"></crd-toolbar>
+
+    <md-content layout-margin class="md-padding" layout="column" md-whiteframe="2dp">
+
+        <md-toolbar md-colors="{'color':'grey-700'}" style="background-color: transparent">
+            <div class="md-toolbar-tools">
+                <div layout="column" flex>
+                    <h2>Isolate Information</h2>
+                    <div class="md-caption" style="padding-bottom: 0;">
+                        View/edit information</div>
+                </div>
+            </div>
+        </md-toolbar>
+
+        <div layout="column" ng-if="showAddButton || showAddIsolate">
+            <div layout="row" layout-margin>
+                <md-button ng-if="showAddButton" class="md-primary md-raised" ng-click="addIsolateClick()">
+                    Add New Isolate</md-button>
+                <div flex></div>
+            </div>
+            <div layout="row" ng-if="showAddIsolate" layout-margin>
+                <md-input-container flex="25">
+                    <label>Select the Isolate</label>
+                    <md-select ng-model="newRow.test_type" aria-label="new sample type">
+                        <md-option ng-repeat="ty in types" ng-value="ty">{{ty}}</md-option>
+                    </md-select>
+                </md-input-container>
+                <md-input-container flex="25">
+                    <label>Location of Sample</label>
+                    <md-select ng-model="newRow.location" aria-label="new sample location">
+                        <md-option ng-repeat="loc in locations" ng-value="loc">{{loc}}</md-option>
+                    </md-select>
+                </md-input-container>
+                <md-input-container flex="25">
+                    <label>Notation</label>
+                    <input ng-model="newRow.notation" style="outline:none;"/>
+                </md-input-container>
+                <md-input-container flex="10">
+                    <label>Test Id</label>
+                    <input ng-disabled="true" style="outline:none;"/>
+                </md-input-container>
+                <md-button class="md-primary md-raised" ng-click="saveNewRow()" style="height:30px;">Save</md-button>
+            </div>
+        </div>
+
+        <md-table-container>
+            <table md-table>
+                <thead md-head>
+                    <tr md-row>
+                        <th md-column>Type</th>
+                        <th md-column>Location</th>
+                        <th md-column>Notation</th>
+                        <th md-column>Test Id</th>
+                        <th>&nbsp;</th>
+                    </tr>
+                </thead>
+                <tbody md-body>
+                    <tr md-row ng-if="isolates.length > 0" ng-repeat="isolate in isolates">
+                        <td md-cell>
+                            <md-select ng-model="isolate.test_type" ng-disabled="isolate.editable === 'false'" aria-label="sample type">
+                                <md-option ng-repeat="ty in types" ng-value="ty">{{ty}}</md-option>
+                            </md-select>
+                        </td>
+                        <td md-cell>
+                            <md-select ng-model="isolate.location" ng-disabled="isolate.editable === 'false'" aria-label="sample location">
+                                <md-option ng-repeat="loc in locations" ng-value="loc">{{loc}}</md-option>
+                            </md-select>
+                        </td>
+                        <td md-cell>
+                            <input ng-model="isolate.notation" style="outline:none;"/>
+                        </td>
+                        <td md-cell style="color:blue;cursor:pointer;outline:none;" ng-click="goToTestInfo(isolate.test_id)">
+                            {{isolate.test_id}}</td>
+                        <td md-cell>
+                            <div layout="row">
+                                <md-icon class="material-icons" ng-click="saveIsolate(isolate)"
+                                         style="outline:none;cursor:pointer;margin:0;">
+                                    save</md-icon>
+                                <md-icon class="material-icons" style="outline:none;cursor:pointer;margin:0 0 0 16px;"
+                                         ng-click="deleteIsolate(isolate)" ng-show="isolate.editable === 'true'">
+                                    delete</md-icon>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr md-row ng-if="isolates.length <= 0">
+                        <td colspan="5" style="padding-left: 24px;">No Isolates Found</td>
+                    </tr>
+                </tbody>
+            </table>
+        </md-table-container>
+    </md-content>
+
+</div>

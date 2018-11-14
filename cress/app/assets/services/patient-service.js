@@ -7,8 +7,11 @@ angular.module('CressApp')
             patientList: null,
             selectedPatientId: null,
             currentPatientLabels: null,
+            patientDropDownObjects: null,
             getStudyLabels: getStudyLabels,
-            getSinglePatientInfo: getSinglePatientInfo
+            getSinglePatientInfo: getSinglePatientInfo,
+            getDropDownValues: getDropDownValues,
+            savePatient: savePatient
         };
 
         return service;
@@ -40,6 +43,38 @@ angular.module('CressApp')
                     console.log("Error in patient-service - getStudyLabels");
                     console.log(err);
                     deferred.reject("Error in patient-service - getStudyLabels");
+                });
+
+            return deferred.promise
+        }
+
+        function getDropDownValues(studyId) {
+            var deferred = $q.defer();
+            $http
+                .get('http://localhost/cress-backend/getStudyDropdownValues.php?id='+studyId)
+                .then(function(response){
+                    deferred.resolve(response.data);
+                })
+                .catch(function(err){
+                    console.log("Error in patient-service - getDropDownValues");
+                    console.log(err);
+                    deferred.reject("Error in patient-service - getDropDownValues");
+                });
+
+            return deferred.promise
+        }
+
+        function savePatient(patient) {
+            var deferred = $q.defer();
+            $http
+                .post('http://localhost/cress-backend/savePatient.php', {patientObj: patient})
+                .then(function(response){
+                    deferred.resolve(response.data);
+                })
+                .catch(function(err){
+                    console.log("Error in patient-service - savePatient");
+                    console.log(err);
+                    deferred.reject("Error in patient-service - savePatient");
                 });
 
             return deferred.promise

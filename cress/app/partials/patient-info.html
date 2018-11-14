@@ -1,61 +1,140 @@
 <div>
-    <md-toolbar class="md-primary" layout="row" md-whiteframe="2">
-        <md-icon class="material-icons" ng-click="goToHome()"
-                 style="margin-left:8px;cursor:pointer;outline:none;">home</md-icon>
-        <div style="text-align:center;padding:16px;">ROCHESTER INSTITUTE OF TECHNOLOGY</div>
-        <div flex></div>
-        <md-menu ng-if="showMenu" style="padding: 16px;outline:none;cursor:pointer;">
-            <md-icon aria-label="Open menu" class="md-raised md-primary" ng-click="openMenu($mdMenu, $event)">menu
-            </md-icon>
-            <md-menu-content width="4">
-                <md-menu-item>
-                    <md-button ng-click="changePassword()">Change Password</md-button>
-                </md-menu-item>
-                <md-menu-item>
-                    <md-button ng-click="logOut()">Log Out</md-button>
-                </md-menu-item>
-            </md-menu-content>
-        </md-menu>
-    </md-toolbar>
+    <crd-toolbar current-nav-item="patients" show-tabs="true"></crd-toolbar>
 
-    <md-content>
-        <md-nav-bar md-no-ink-bar="disableInkBar" md-selected-nav-item="currentNavItem"
-                    nav-bar-aria-label="navigation links">
-            <md-nav-item md-nav-click="goTo('patients')" name="patients">
-                Patients
-            </md-nav-item>
-            <md-nav-item md-nav-click="goTo('isolates')" name="isolates">
-                Isolates
-            </md-nav-item>
-            <md-nav-item md-nav-click="goTo('tests')" name="tests">
-                Tests
-            </md-nav-item>
-            <md-nav-item md-nav-click="goTo('reports')" name="reports">
-                Reports
-            </md-nav-item>
-            <md-nav-item ng-if="isAdmin" md-nav-click="goTo('reports')" name="reports">
-                Admin
-            </md-nav-item>
-        </md-nav-bar>
-    </md-content>
+    <md-content layout-margin class="md-padding" layout="column" md-whiteframe="2dp">
 
-    <md-content class="md-padding">
-        <div layout="column" style="padding:8px;margin-top: 0">
-            <div ng-repeat="labels in infoValArray">
-                <md-input-container ng-if="obj.showTextField">
-                    <label>{{labels.label}}</label>
-                    <input type="text" />
+        <md-toolbar md-colors="{'color':'grey-700'}" style="background-color: transparent">
+            <div class="md-toolbar-tools">
+                <div layout="column" flex>
+                    <h2>Patient Information</h2>
+                    <div class="md-caption" style="padding-bottom: 0;">
+                        View/edit information</div>
+                </div>
+            </div>
+        </md-toolbar>
+
+        <div layout="row" layout-xs="column" style="padding:0 8px;margin-top:8px;">
+            <div layout="column" flex="50" flex-xs="100" class="md-padding">
+                <md-input-container ng-repeat="obj in leftLabelList" class="hide-validation-error">
+                    <label class="label-overflow">{{obj.display_text}}</label>
+                    <input ng-model="patientInfoObj[''+obj.db_field]"
+                           ng-if="obj.label_type === 'single' && obj.is_required === '0'" />
+                    <input ng-model="patientInfoObj[''+obj.db_field]"
+                           ng-if="obj.label_type === 'single' && obj.is_required === '1'" required/>
+                    <md-datepicker ng-model="patientInfoObj[''+obj.db_field]"
+                                   ng-if="obj.label_type === 'date' && obj.is_required === '0'"></md-datepicker>
+                    <md-datepicker ng-model="patientInfoObj[''+obj.db_field]" required
+                                   ng-if="obj.label_type === 'date' && obj.is_required === '1'"></md-datepicker>
+                    <md-select ng-model="patientInfoObj[''+obj.db_field]"
+                               ng-if="obj.label_type === 'multiple' && obj.is_required === '0'">
+                        <md-option ng-repeat="a in patientDropDownValues[''+obj.label_text]" ng-value="a.value">{{a.value}}</md-option>
+                    </md-select>
+                    <md-select ng-model="patientInfoObj[''+obj.db_field]"
+                               ng-if="obj.label_type === 'multiple' && obj.is_required === '1'" required>
+                        <md-option ng-repeat="a in patientDropDownValues[''+obj.label_text]" ng-value="a.value">{{a.value}}</md-option>
+                    </md-select>
+                    <md-select ng-model="patientInfoObj[''+obj.db_field]" multiple="true"
+                               ng-if="obj.label_type === 'multiselect' && obj.is_required === '0'">
+                        <md-option ng-repeat="a in patientDropDownValues[''+obj.label_text]" ng-value="a.value">{{a.value}}</md-option>
+                    </md-select>
+                    <md-select ng-model="patientInfoObj[''+obj.db_field]" multiple="true"
+                               ng-if="obj.label_type === 'multiselect' && obj.is_required === '1'" required>
+                        <md-option ng-repeat="a in patientDropDownValues[''+obj.label_text]" ng-value="a.value">{{a.value}}</md-option>
+                    </md-select>
+                    <md-chips ng-model="patientInfoObj[''+obj.db_field]" md-removable="true" readonly="true"
+                              ng-if="obj.label_type === 'multiselect' && patientInfoObj[''+obj.db_field].length > 0">
+                        <md-chip-template>
+                            <span>{{$chip}}</span>
+                        </md-chip-template>
+                    </md-chips>
                 </md-input-container>
-                <md-input-container ng-if="obj.showDateField">
-                    <label>{{labels.label}}</label>
-                    <input type="text" />
-                </md-input-container>
-                <md-input-container ng-if="obj.showTextField">
-                    <label>{{labels.label}}</label>
-                    <input type="text" />
+            </div>
+            <div layout="column" flex="50" flex-xs="100" class="md-padding">
+                <md-input-container ng-repeat="obj in rightLabelList" class="hide-validation-error">
+                    <label class="label-overflow">{{obj.display_text}}</label>
+                    <input ng-model="patientInfoObj[''+obj.db_field]"
+                           ng-if="obj.label_type === 'single' && obj.is_required === '0'" />
+                    <input ng-model="patientInfoObj[''+obj.db_field]"
+                           ng-if="obj.label_type === 'single' && obj.is_required === '1'" required/>
+                    <md-datepicker ng-model="patientInfoObj[''+obj.db_field]"
+                                   ng-if="obj.label_type === 'date' && obj.is_required === '0'"></md-datepicker>
+                    <md-datepicker ng-model="patientInfoObj[''+obj.db_field]" required
+                                   ng-if="obj.label_type === 'date' && obj.is_required === '1'"></md-datepicker>
+                    <md-select ng-model="patientInfoObj[''+obj.db_field]"
+                               ng-if="obj.label_type === 'multiple' && obj.is_required === '0'">
+                        <md-option ng-repeat="a in patientDropDownValues[''+obj.label_text]" ng-value="a.value">{{a.value}}</md-option>
+                    </md-select>
+                    <md-select ng-model="patientInfoObj[''+obj.db_field]" required
+                               ng-if="obj.label_type === 'multiple' && obj.is_required === '1'">
+                        <md-option ng-repeat="a in patientDropDownValues[''+obj.label_text]" ng-value="a.value">{{a.value}}</md-option>
+                    </md-select>
+                    <md-select ng-model="patientInfoObj[''+obj.db_field]" multiple="true"
+                               ng-if="obj.label_type === 'multiselect' && obj.is_required === '0'">
+                        <md-option ng-repeat="a in patientDropDownValues[''+obj.label_text]" ng-value="a.value">{{a.value}}</md-option>
+                    </md-select>
+                    <md-select ng-model="patientInfoObj[''+obj.db_field]" multiple="true"
+                               ng-if="obj.label_type === 'multiselect' && obj.is_required === '1'" required>
+                        <md-option ng-repeat="a in patientDropDownValues[''+obj.label_text]" ng-value="a.value">{{a.value}}</md-option>
+                    </md-select>
+                    <md-chips ng-model="patientInfoObj[''+obj.db_field]" md-removable="true" readonly="true"
+                              ng-disabled=true ng-if="obj.label_type === 'multiselect' && patientInfoObj[''+obj.db_field].length > 0">
+                        <md-chip-template style="outline:none;">
+                            <span>{{$chip}}</span>
+                        </md-chip-template>
+                    </md-chips>
                 </md-input-container>
             </div>
         </div>
+
+        <div layout="row" layout-xs="column" style="padding:0 8px;">
+            <md-button class="md-primary md-raised" ng-click="savePatient()">Save</md-button>
+            <div layout-align="end end" style="margin-top:16px;"> * marked fields are required</div>
+        </div>
+
     </md-content>
+
+    <div layout="column" layout-margin class="md-padding" md-whiteframe="2dp" style="margin-top:16px;">
+
+        <md-toolbar md-colors="{'color':'grey-700'}" style="background-color: transparent">
+            <div class="md-toolbar-tools">
+                <div layout="column" flex>
+                    <h2>Visit Information</h2>
+                    <div class="md-caption" style="padding-bottom: 0;">
+                        Visit Summary - Click on date to view detailed visit information
+                    </div>
+                </div>
+            </div>
+        </md-toolbar>
+
+        <md-table-container>
+            <table md-table>
+                <thead md-head>
+                    <tr md-row>
+                        <th md-column ng-repeat="col in visitColumns" ng-if="col.clickable !== 'true'">
+                            {{col.col_display_name}}</th>
+                        <th md-column ng-repeat="col in visitColumns" ng-if="col.clickable === 'true'">
+                            {{col.col_display_name}}</th>
+                    </tr>
+                </thead>
+                <tbody md-body ng-if="visits.length === 0">
+                    <tr md-row ng-show="visits.length === 0">
+                        <td md-cell colspan="3">No visits yet</td>
+                    </tr>
+                </tbody>
+                <tbody md-body ng-if="visits.length > 0">
+                    <tr md-row ng-repeat="visit in visits track by $index">
+                        <td md-cell ng-repeat="col in visitColumns" ng-if="col.clickable !== 'true'">
+                            {{visit[''+col.col_db_field]}}
+                        </td>
+                        <td md-cell ng-click="goToVisit(visit, $event)" ng-if="col.clickable === 'true'"
+                            ng-repeat="col in visitColumns" style="outline:none;cursor:pointer;color:blue;text-decoration:underline;">
+                            {{visit[''+col.col_db_field]}}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </md-table-container>
+
+    </div>
 
 </div>

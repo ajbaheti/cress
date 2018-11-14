@@ -1,0 +1,57 @@
+<div>
+    <crd-toolbar current-nav-item="tests" show-tabs="true"></crd-toolbar>
+
+    <md-content layout-margin class="md-padding" layout="column" md-whiteframe="2dp">
+
+        <md-toolbar md-colors="{'color':'grey-700'}" style="background-color: transparent">
+            <div class="md-toolbar-tools">
+                <div layout="column" flex>
+                    <h2>Test Information</h2>
+                    <div class="md-caption" style="padding-bottom: 0;">
+                        View/edit information</div>
+                </div>
+            </div>
+        </md-toolbar>
+
+        <div layout="row">
+            <md-button class="md-primary md-raised" ng-click="saveAllTests()">Save All</md-button>
+        </div>
+
+        <md-table-container>
+            <table md-table>
+                <thead md-head>
+                    <tr md-row>
+                        <th md-column>Type</th>
+                        <th md-column>Results</th>
+                        <th md-column>Units</th>
+                        <th md-column>Notation</th>
+                        <th md-column>Researcher</th>
+                    </tr>
+                </thead>
+                <tbody md-body>
+                    <tr md-row ng-repeat="test in allTests">
+                        <td md-cell>{{test.test_type}}</td>
+                        <td md-cell>
+                            <input ng-model="test.test_results" style="outline:none;"/>
+                        </td>
+                        <td md-cell>
+                            <input ng-model="test.test_unit" style="outline:none;"/>
+                        </td>
+                        <td md-cell>
+                            <input ng-model="test.test_notation" style="outline:none;"/>
+                        </td>
+                        <td md-cell>
+                            <input ng-model="test.researcher" style="outline:none;"/>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </md-table-container>
+
+        <div layout="row">
+            <md-button class="md-primary md-raised" ng-click="saveAllTests()">Save All</md-button>
+        </div>
+
+    </md-content>
+
+</div>

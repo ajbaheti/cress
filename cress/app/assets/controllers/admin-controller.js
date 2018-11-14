@@ -1,47 +1,16 @@
 'use strict';
 
 angular.module('CressApp')
-    .controller('AdminCtrl', function ($scope, $location, $mdMenu, $mdDialog, AuthService) {
-        console.log('admin ctrl called');
-
-        $scope.showMenu = AuthService.isLoggedIn();
-        if(!$scope.showMenu){
-            $location.path('/login');
+    .controller('AdminCtrl', function ($scope, $location, $mdMenu, $mdDialog, AuthService, PatientService, RedirectPath) {
+        if(RedirectPath !== '/admin'){
+            $location.path(RedirectPath);
         }
-        $scope.currentNavItem = 'admin';
-        $scope.isAdmin = AuthService.user.isAdmin;
 
-        $scope.goTo = function(path) {
-            $location.path('/'+path);
-        };
+        console.log(PatientService.patientDropDownObjects);
+        $scope.keys = Object.entries(PatientService.patientDropDownObjects);
+        console.log($scope.keys);
 
-        $scope.goToHome = function() {
-            $location.path('/');
-        };
 
-        $scope.logOut = function() {
-            AuthService.logOut();
-            $location.path('/login');
-        };
-
-        $scope.changePassword = function(ev) {
-
-            $mdDialog.show({
-                controller: 'ChangePasswordCtrl',
-                templateUrl: 'app/partials/changePassword.html',
-                parent: angular.element(document.body),
-                targetEvent: ev,
-                clickOutsideToClose: false
-            })
-            .then(function(answer) {
-                $scope.status = 'You said the information was "' + answer + '".';
-            }, function() {
-                $scope.status = 'You cancelled the dialog.';
-            });
-        };
-
-        $scope.openMenu = function($mdMenu, ev){
-            $mdMenu.open(ev);
-        };
+        //TODO: when saving label order(patient), validate if order is sequence or not before saving for correctness
 
     });

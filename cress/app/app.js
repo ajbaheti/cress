@@ -1,12 +1,52 @@
-var cressApp = angular.module('CressApp', ['ngMaterial', 'ngMessages', 'ngRoute']);
+var cressApp = angular.module('CressApp', ['ngMaterial', 'ngMessages', 'ngRoute', 'angularMoment', 'md.data.table']);
 
 cressApp.config(function($routeProvider) {
 
-	var CURRENT_USER_RESOLVER = ['AuthService', function(AuthService) {
+	var CURRENT_PATH_RESOLVER = ['$route', 'AuthService', 'PatientService', 'IsolateService', 'TestsService',
+            function($route, AuthService, PatientService, IsolateService, TestsService) {
 		if(AuthService.isLoggedIn()){
-            return true;
+            switch($route.current.$$route.originalPath){
+                case '/':
+                    // PatientService.patientList = null;
+                    return '/';
+                case '/patients':
+                    if(PatientService.patientList){
+                        // PatientService.currentPatientLabels = null;
+                        // PatientService.patientDropDownObjects = null;
+                        return '/patients';
+                    }
+                    return '/';
+                case '/patient-info':
+                    if(PatientService.selectedPatientId){
+                        return '/patient-info';
+                    }
+                    return '/patients';
+                case '/isolates':
+                    return '/isolates';
+                case '/isolate-info':
+                    if(IsolateService.selectedIsolate){
+                        return '/isolate-info';
+                    }
+                    return '/isolates';
+                case '/tests':
+                    return '/tests';
+                case '/test-info':
+                    if(TestsService.selectedTestInfo){
+                        return '/test-info';
+                    }
+                    return '/tests';
+                case '/reports':
+                    return '/reports';
+                case '/admin':
+                    return '/admin';
+                default:
+                    // PatientService.patientList = null;
+                    return '/';
+            }
         }
-        throw 'no-user-exception';
+        else {
+            return '/login';
+        }
     }];
 
     $routeProvider
@@ -14,7 +54,7 @@ cressApp.config(function($routeProvider) {
 	        templateUrl : 'app/partials/home.html',
 	        controller: 'HomeCtrl',
 			resolve: {
-	        	User: CURRENT_USER_RESOLVER
+	        	RedirectPath: CURRENT_PATH_RESOLVER
 			}
 	    })
 
@@ -27,7 +67,7 @@ cressApp.config(function($routeProvider) {
 	    	templateUrl : 'app/partials/patients.html',
 	        controller: 'PatientsCtrl',
             resolve: {
-                User: CURRENT_USER_RESOLVER
+                RedirectPath: CURRENT_PATH_RESOLVER
             }
 	    })
 
@@ -35,7 +75,7 @@ cressApp.config(function($routeProvider) {
             templateUrl: 'app/partials/patient-info.html',
             controller: 'PatientInfoCtrl',
             resolve: {
-                User: CURRENT_USER_RESOLVER
+                RedirectPath: CURRENT_PATH_RESOLVER
             }
         })
 
@@ -43,15 +83,23 @@ cressApp.config(function($routeProvider) {
 	    	templateUrl : 'app/partials/isolates.html',
 	        controller: 'IsolatesCtrl',
             resolve: {
-                User: CURRENT_USER_RESOLVER
+                RedirectPath: CURRENT_PATH_RESOLVER
             }
 	    })
+
+        .when('/isolate-info', {
+            templateUrl : 'app/partials/isolate-info.html',
+            controller: 'IsolateInfoCtrl',
+            resolve: {
+                RedirectPath: CURRENT_PATH_RESOLVER
+            }
+        })
 
         .when('/reports', {
             templateUrl : 'app/partials/reports.html',
             controller: 'ReportsCtrl',
             resolve: {
-                User: CURRENT_USER_RESOLVER
+                RedirectPath: CURRENT_PATH_RESOLVER
             }
         })
 
@@ -59,7 +107,15 @@ cressApp.config(function($routeProvider) {
             templateUrl : 'app/partials/tests.html',
             controller: 'TestsCtrl',
             resolve: {
-                User: CURRENT_USER_RESOLVER
+                RedirectPath: CURRENT_PATH_RESOLVER
+            }
+        })
+
+        .when('/test-info', {
+            templateUrl : 'app/partials/test-info.html',
+            controller: 'TestInfoCtrl',
+            resolve: {
+                RedirectPath: CURRENT_PATH_RESOLVER
             }
         })
 
@@ -67,7 +123,7 @@ cressApp.config(function($routeProvider) {
             templateUrl : 'app/partials/admin.html',
             controller: 'AdminCtrl',
             resolve: {
-                User: CURRENT_USER_RESOLVER
+                RedirectPath: CURRENT_PATH_RESOLVER
             }
         })
 

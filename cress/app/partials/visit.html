@@ -1,0 +1,112 @@
+<md-dialog style="width:90%;max-height:95%;max-width:90%;">
+    <md-toolbar>
+        <div class="md-toolbar-tools">
+            <h2>Visit Date - {{visit.visit_date}} / Patient Id - {{patientId}}</h2>
+            <span flex></span>
+            <md-button ng-click="cancel()">
+                <md-icon class="material-icons" aria-label="Close dialog">close</md-icon>
+            </md-button>
+        </div>
+    </md-toolbar>
+
+    <md-dialog-content>
+        <div class="md-dialog-content" layout="column">
+
+            <div layout="column" md-whiteframe="2dp">
+                <md-toolbar md-colors="{'color':'grey-700'}" style="background-color: transparent">
+                    <div class="md-toolbar-tools">
+                        <div layout="column" flex>
+                            <h2>Visit Information</h2>
+                        </div>
+                    </div>
+                </md-toolbar>
+                <div layout="row" style="padding:16px 16px 0 16px;">
+                    <div layout="column" flex="40">
+                        <div>Visit Id: {{visit.visit_id}}</div>
+                        <div>Visit Date: {{visit.visit_date}}</div>
+                        <div>Patient Id: {{patientId}}</div>
+                        <md-input-container>
+                            <label>Visit Types</label>
+                            <md-select ng-model="visit.selectedVisitType" multiple="true" ng-change="visitTypeChanged()">
+                                <md-option ng-repeat="vt in listOfVisitTypes" ng-value="vt">
+                                    {{vt.visit_type_name}}
+                                </md-option>
+                            </md-select>
+                            <md-chips ng-model="visit.selectedVisitType" md-removable="true" readonly="true"
+                                      ng-if="visit.selectedVisitType.length > 0" md-on-remove="visitTypeChanged()">
+                                <md-chip-template style="margin-top: 16px;">
+                                    <span>{{$chip.visit_type_name}}</span>
+                                </md-chip-template>
+                            </md-chips>
+                        </md-input-container>
+                    </div>
+                    <div flex="60" layout="column" ng-if="allGroupings.length > 0" style="padding:0 8px;margin-left:8px;">
+                        <div ng-repeat="groups in allGroupings" layout="column">
+                            <div class="grouping_header">{{groups.group_title}}</div>
+                            <md-input-container ng-repeat="obj in groups.groupingFields" class="hide-validation-error"
+                                                style="margin:12px 0;">
+                                <label ng-if="obj.label_type !== 'checkbox'">{{obj.grouping_label}}</label>
+                                <md-select ng-model="visit[''+obj.grouping_label_text]" ng-if="obj.label_type === 'multiple'">
+                                    <md-option ng-repeat="a in groupingDropdownObjects[''+obj.grouping_label_text]"
+                                               ng-value="a.dropdown_value">{{a.dropdown_value}}</md-option>
+                                </md-select>
+                                <input ng-model="visit[''+obj.grouping_label_text]" ng-if="obj.label_type === 'single'" />
+                                <md-select ng-model="visit[''+obj.grouping_label_text]" ng-if="obj.label_type === 'multivalue'"
+                                           multiple="true">
+                                    <md-option ng-repeat="a in groupingDropdownObjects[''+obj.grouping_label_text]"
+                                               ng-value="a.dropdown_value">{{a.dropdown_value}}</md-option>
+                                </md-select>
+                                <div layout="row" ng-if="obj.label_type === 'checkbox'">
+                                    <md-checkbox md-no-ink aria-label="Checkbox left" ng-model="visit[''+obj.grouping_label_text]"
+                                                 class="md-primary" style="margin:0;">
+                                        {{obj.grouping_label}}
+                                    </md-checkbox>
+                                    <input ng-model="visit[''+obj.grouping_label]" ng-if="visit[''+obj.grouping_label_text]"
+                                        style="margin-left:16px;" />
+                                </div>
+                            </md-input-container>
+                        </div>
+                    </div>
+                </div>
+                <div layout="row" style="padding: 0 8px 16px 8px;">
+                    <md-button class="md-raised md-primary" ng-click="saveVisit()">Save</md-button>
+                </div>
+            </div>
+
+            <div layout="column" style="margin-top:16px;padding:16px;" md-whiteframe="2dp">
+
+                <md-toolbar md-colors="{'color':'grey-700'}" style="background-color:transparent;">
+                    <div class="md-toolbar-tools" style="padding:0;">
+                        <div layout="column" flex>
+                            <h2>Samples Taken</h2>
+                        </div>
+                    </div>
+                </md-toolbar>
+
+                <div layout="row" ng-repeat="sample in samples" style="padding:4px 0;">
+                    <md-checkbox ng-disabled="sample.editable === 'false'" flex="40" style="margin-top:8px;"
+                                 ng-model="sample.isChecked" ng-change="sampleValueChanged(sample)">
+                        {{sample.sample_name}}</md-checkbox>
+                    <div layout="row" flex="60" ng-if="sample.isChecked">
+                        <div flex="70" layout="row">
+                            <div style="margin-top:8px;"> Notation: </div>
+                            <input ng-model="sample.notation" ng-disabled="sample.editable === 'false'"
+                                   style="margin-left:4px;height:32px;"/>
+                        </div>
+                        <div flex="30" layout="row" style="margin-top:8px;margin-left:16px;">
+                            <div>Id: </div>
+                            <div style="margin-left:4px;outline:none;cursor:pointer;color:blue;text-decoration:underline;"
+                                    ng-click="goToSample(sample)">{{sample.sample_id}}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div layout="row">
+                    <md-button class="md-primary md-raised" ng-click="saveSamples()" style="margin-left:0;">
+                        Save</md-button>
+                </div>
+            </div>
+
+        </div>
+    </md-dialog-content>
+</md-dialog>

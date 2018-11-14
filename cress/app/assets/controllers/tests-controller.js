@@ -1,47 +1,32 @@
 'use strict';
 
 angular.module('CressApp')
-    .controller('TestsCtrl', function ($scope, $location, $mdMenu, $mdDialog, AuthService) {
-        console.log('tests ctrl called');
+    .controller('TestsCtrl', function ($scope, $location, $mdMenu, $mdDialog, AuthService, TestsService, RedirectPath) {
 
-        $scope.showMenu = AuthService.isLoggedIn();
-        if(!$scope.showMenu){
-            $location.path('/login');
+        if(RedirectPath !== '/tests'){
+            $location.path(RedirectPath);
         }
-        $scope.currentNavItem = 'tests';
-        $scope.isAdmin = AuthService.user.isAdmin;
 
-        $scope.goTo = function(path) {
-            $location.path('/'+path);
-        };
+        $scope.testId = null;
 
-        $scope.goToHome = function() {
-            $location.path('/');
-        };
-
-        $scope.logOut = function() {
-            AuthService.logOut();
-            $location.path('/login');
-        };
-
-        $scope.changePassword = function(ev) {
-
-            $mdDialog.show({
-                controller: 'ChangePasswordCtrl',
-                templateUrl: 'app/partials/changePassword.html',
-                parent: angular.element(document.body),
-                targetEvent: ev,
-                clickOutsideToClose: false
-            })
-            .then(function(answer) {
-                $scope.status = 'You said the information was "' + answer + '".';
-            }, function() {
-                $scope.status = 'You cancelled the dialog.';
-            });
-        };
-
-        $scope.openMenu = function($mdMenu, ev){
-            $mdMenu.open(ev);
-        };
+        $scope.getTestInfo = function() {
+            console.log($scope.testId);
+            if($scope.testId){
+                TestsService
+                    .getTestsById($scope.testId)
+                    .then(function(data){
+                        if(data !== 'No tests found'){
+                            // console.log(data);
+                            TestsService.selectedTestInfo = data;
+                            $location.path('/test-info');
+                        } else {
+                            console.log(data);
+                        }
+                    })
+                    .catch(function(err){
+                        console.log("error getting test information by id");
+                    });
+            }
+        }
 
     });

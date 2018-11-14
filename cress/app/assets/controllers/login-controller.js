@@ -1,7 +1,6 @@
 
 angular.module('CressApp')
 	.controller('LoginCtrl', function ($scope, $location, AuthService) {
-    	console.log('Login ctrl called');
 
 		$scope.username = null;
 		$scope.password = null;
