@@ -20,9 +20,9 @@ angular.module('CressApp')
         IsolateService
             .getTestsForIsolate($scope.sample.sample_id)
             .then(function(data){
-                console.log(data);
                 if(data !== 'No match found'){
                     $scope.isolates = data;
+                    $scope.originalIsolates = angular.copy($scope.isolates, $scope.originalIsolates);
                 } else {
                     $scope.isolates = [];
                 }
@@ -31,12 +31,19 @@ angular.module('CressApp')
                 console.log("Error getting tests for sample");
             });
 
-        /*$scope.$watch(function(){
-            return $scope.isolates;
-        }, function(oldVal, newVal){
-            console.log(oldVal);
-            console.log(newVal);
-        });*/
+        $scope.changeInIsolateRow = function(isolate){
+            var temp = $scope.originalIsolates.filter(function(islt){
+                return islt.test_id === isolate.test_id;
+            });
+            var sampleKeys = Object.keys(temp[0]);
+            var noChange = true;
+            sampleKeys.forEach(function(key){
+                if(temp[0][''+key] !== isolate[''+key]){
+                    noChange = false;
+                }
+            });
+            isolate.showSave = !noChange;
+        };
 
         $scope.goToTestInfo = function(testId) {
             if(testId){

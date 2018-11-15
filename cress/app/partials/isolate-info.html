@@ -58,28 +58,30 @@
                 <tbody md-body>
                     <tr md-row ng-if="isolates.length > 0" ng-repeat="isolate in isolates">
                         <td md-cell>
-                            <md-select ng-model="isolate.test_type" ng-disabled="isolate.editable === 'false'" aria-label="sample type">
+                            <md-select ng-model="isolate.test_type" ng-disabled="isolate.editable === 'false'"
+                                       aria-label="sample type" ng-change="changeInIsolateRow(isolate)">
                                 <md-option ng-repeat="ty in types" ng-value="ty">{{ty}}</md-option>
                             </md-select>
                         </td>
                         <td md-cell>
-                            <md-select ng-model="isolate.location" ng-disabled="isolate.editable === 'false'" aria-label="sample location">
+                            <md-select ng-model="isolate.location" ng-disabled="isolate.editable === 'false'"
+                                       aria-label="sample location" ng-change="changeInIsolateRow(isolate)">
                                 <md-option ng-repeat="loc in locations" ng-value="loc">{{loc}}</md-option>
                             </md-select>
                         </td>
                         <td md-cell>
-                            <input ng-model="isolate.notation" style="outline:none;"/>
+                            <input ng-model="isolate.notation" ng-change="changeInIsolateRow(isolate)" style="outline:none;"/>
                         </td>
                         <td md-cell style="color:blue;cursor:pointer;outline:none;" ng-click="goToTestInfo(isolate.test_id)">
                             {{isolate.test_id}}</td>
                         <td md-cell>
-                            <div layout="row">
-                                <md-icon class="material-icons" ng-click="saveIsolate(isolate)"
-                                         style="outline:none;cursor:pointer;margin:0;">
+                            <div layout="row" style="width:100px;text-align:right;">
+                                <md-icon class="material-icons" ng-click="saveIsolate(isolate)" ng-show="isolate.showSave"
+                                         style="outline:none;cursor:pointer;margin:0;width:50px;text-align:center;">
                                     save</md-icon>
-                                <md-icon class="material-icons" style="outline:none;cursor:pointer;margin:0 0 0 16px;"
-                                         ng-click="deleteIsolate(isolate)" ng-show="isolate.editable === 'true'">
-                                    delete</md-icon>
+                                <md-icon class="material-icons" style="outline:none;cursor:pointer;margin:0;width:50px;text-align:center;"
+                                     ng-click="deleteIsolate(isolate)" ng-show="isolate.editable === 'true'">
+                                delete</md-icon>
                             </div>
                         </td>
                     </tr>
