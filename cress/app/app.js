@@ -37,6 +37,8 @@ cressApp.config(function($routeProvider) {
                     return '/tests';
                 case '/reports':
                     return '/reports';
+                case '/query':
+                    return '/query';
                 case '/admin':
                     return '/admin';
                 default:
@@ -114,6 +116,14 @@ cressApp.config(function($routeProvider) {
         .when('/test-info', {
             templateUrl : 'app/partials/test-info.html',
             controller: 'TestInfoCtrl',
+            resolve: {
+                RedirectPath: CURRENT_PATH_RESOLVER
+            }
+        })
+
+        .when('/query', {
+            templateUrl : 'app/partials/query.html',
+            controller: 'QueryCtrl',
             resolve: {
                 RedirectPath: CURRENT_PATH_RESOLVER
             }
