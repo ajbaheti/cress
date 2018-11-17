@@ -1,23 +1,18 @@
 <div layout="column" layout-align="center center">
-
-	<md-toolbar class="md-primary sticky-header" md-whiteframe="2">
-		<div style="padding:16px;margin-left:8px;">ROCHESTER INSTITUTE OF TECHNOLOGY</div>
+    <md-toolbar class="md-primary sticky-header" md-whiteframe="2">
+        <div style="padding:16px;margin-left:8px;">ROCHESTER INSTITUTE OF TECHNOLOGY</div>
 	</md-toolbar>
 
 	<div md-whiteframe="2dp" layout="column" style="width:500px;margin-top: 32px;" class="md-padding" layout-margin>
 		<md-input-container>
 	        <label>Username</label>
 	        <input ng-model="username">
-	      </md-input-container>
-
-	      <md-input-container>
+        </md-input-container>
+        <md-input-container>
 	        <label>Password</label>
 	        <input ng-model="password" type="password">
-	      </md-input-container>
-
-		<div ng-if="error" style="color:red;margin:18px 0;">{{error}}</div>
-
-	      <md-button layout-align="center end" class="md-raised md-primary" 
-	      	ng-click="login()">Login</md-button>
-      </div>	
+        </md-input-container>
+		<div ng-if="error" style="color:red;margin:0 0 18px 8px;">{{error}}</div>
+        <md-button layout-align="center end" class="md-raised md-primary" ng-click="login()">Login</md-button>
+    </div>
 </div>

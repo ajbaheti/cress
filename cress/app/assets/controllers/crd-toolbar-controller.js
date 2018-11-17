@@ -33,8 +33,10 @@
             };
 
             $scope.logOut = function() {
-                AuthService.logOut();
-                $location.path('/login');
+                AuthService.logOut()
+                    .then(function(){
+                        $location.path('/login');
+                    });
             };
 
             $scope.changePassword = function(ev) {

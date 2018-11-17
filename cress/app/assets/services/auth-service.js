@@ -32,7 +32,7 @@ angular.module('CressApp')
                         if(response.data.length === 1){
                             user = response.data[0];
                         } else {
-                            user.error = "User not found";
+                            user.error = "Invalid Username/Password";
                         }
                         deferred.resolve(user);
                     })
@@ -46,8 +46,23 @@ angular.module('CressApp')
             },
 
             logOut: function () {
-                service.credentials.clear();
-                service.user.username = null;
+                var deferred = $q.defer();
+                $http
+                    .get('http://localhost/cress-backend/logout.php')
+                    .then(function(response){
+                        if(response.data === "SUCCESS"){
+                            service.credentials.clear();
+                            service.user.username = null;
+                            deferred.resolve(response.data);
+                        }
+                    })
+                    .catch(function(err){
+                        console.log("Error in auth-service - logOut");
+                        console.log(err);
+                        deferred.reject("Error in auth-service - logOut");
+                    });
+
+                return deferred.promise;
             },
 
             changePassword: function(pwdToSave) {
@@ -61,6 +76,22 @@ angular.module('CressApp')
                         console.log("Error in auth-service - changePassword");
                         console.log(err);
                         deferred.reject("Error in auth-service - changePassword");
+                    });
+
+                return deferred.promise;
+            },
+
+            getSession: function() {
+                var deferred = $q.defer();
+                $http
+                    .get('http://localhost/cress-backend/getSession.php')
+                    .then(function(response){
+                        deferred.resolve(response.data);
+                    })
+                    .catch(function(err){
+                        console.log("Error in auth-service - getSession");
+                        console.log(err);
+                        deferred.reject("Error in auth-service - getSession");
                     });
 
                 return deferred.promise;

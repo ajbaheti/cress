@@ -13,7 +13,6 @@ angular.module('CressApp')
             return AuthService
 				.processLogin()
 				.then(function(user){
-					// console.log(user);
 					if(user.error){
 						$scope.error = user.error;
 					} else {

@@ -19,7 +19,7 @@ angular.module('CressApp')
             .getQueryFields()
             .then(function(fields){
                 $scope.allFields = fields;
-                $scope.savedAllFields = fields;
+                $scope.savedAllFields = angular.copy(fields, $scope.savedAllFields);
             })
             .catch(function(err){
                 console.log("Error getting query fields");
