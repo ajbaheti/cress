@@ -117,11 +117,10 @@ angular.module('CressApp')
                                 return obj.grouping_label === lbl.lbl_text;
                             });
                             // find grouping, this label belongs to and push data to that groups fields
-                            $scope.allGroupings.find(function(obj){
-                                return obj.group_title === lbl.group_title;
-                            }).groupingFields.push(x[0]);
+                            var y = findGroup($scope.allGroupings, lbl)
+                            y.groupingFields.push(x[0]);
                         });
-                        // console.log($scope.allGroupings);
+//                         console.log($scope.allGroupings);
                     }
                 })
                 .catch(function(err){
@@ -134,8 +133,20 @@ angular.module('CressApp')
         };
 
         function removeDuplicates(myArr, prop) {
-            return myArr.filter((obj, pos, arr) => {
-                return arr.map(mapObj => mapObj[prop]).indexOf(obj[prop]) === pos;
+             return myArr.filter(function(obj, pos, arr){
+                return arr.map(function(mapObj){
+                    return mapObj[prop];
+                }).indexOf(obj[prop]) === pos;
             });
+        } 
+        
+        function findGroup(arr, lbl) {
+        	var tempG = null;
+        	arr.forEach(function(obj){
+        		if(obj.group_title === lbl.group_title){
+        			tempG = obj;
+        		}
+        	});
+        	return tempG;
         }
     });

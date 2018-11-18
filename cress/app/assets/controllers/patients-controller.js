@@ -57,10 +57,12 @@ angular.module('CressApp')
         };
 
         function removeDuplicates(myArr, prop) {
-            return myArr.filter((obj, pos, arr) => {
-                return arr.map(mapObj => mapObj[prop]).indexOf(obj[prop]) === pos;
+             return myArr.filter(function(obj, pos, arr){
+                return arr.map(function(mapObj){
+                    return mapObj[prop];
+                }).indexOf(obj[prop]) === pos;
             });
-        }
+        } 
 
         //TODO Admin page drop down edits
         //TODO Sort drop down values by sort_order

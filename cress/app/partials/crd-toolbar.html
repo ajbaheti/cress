@@ -18,7 +18,7 @@
         </md-menu>
     </md-toolbar>
 
-    <md-content class="sticky-tabs" ng-if="showTabs">
+    <div class="sticky-tabs" ng-if="showTabs">
         <md-nav-bar md-no-ink-bar="disableInkBar" md-selected-nav-item="currentNavItem"
                     nav-bar-aria-label="navigation links">
             <md-nav-item md-nav-click="goTo('patients')" name="patients">Patients</md-nav-item>
@@ -28,5 +28,5 @@
             <md-nav-item md-nav-click="goTo('query')" name="query">Query</md-nav-item>
             <md-nav-item ng-if="isAdmin" md-nav-click="goTo('admin')" name="admin">Admin</md-nav-item>
         </md-nav-bar>
-    </md-content>
+    </div>
 </div>

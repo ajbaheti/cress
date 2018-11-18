@@ -26,9 +26,13 @@ angular.module('CressApp')
             });
 
         $scope.addToQueryFields = function(fieldObj) {
-            $scope.allFields.splice($scope.allFields.findIndex(function(obj){
-                return obj.field_name === fieldObj.field_name;
-            }), 1);
+            var index = null;
+            $scope.allFields.forEach(function(obj, i){
+            	if(obj.field_name === fieldObj.field_name){
+            		index = i;
+            	}
+            });
+            $scope.allFields.splice(index, 1);
             $scope.queryFields.push(fieldObj);
         };
 
