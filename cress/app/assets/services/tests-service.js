@@ -13,7 +13,8 @@ angular.module('CressApp')
         function getTestsById(testId) {
             var deferred = $q.defer();
             $http
-                .get('http://localhost/cress-backend/getTestsUnderMainTest.php?id=' + testId)
+                // .get('http://localhost/cress-backend/getTestsUnderMainTest.php?id=' + testId)
+                .get('http://googleglass.cias.rit.edu/cress-backend/getTestsUnderMainTest.php?id=' + testId)
                 .then(function (response) {
                     deferred.resolve(response.data);
                 })

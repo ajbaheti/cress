@@ -126,5 +126,4 @@ angular.module('CressApp')
         };
 
         //TODO - add activate things in function, so that it can be called on successful patient save
-        //TODO - create patient front-end/backend
     });

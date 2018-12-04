@@ -19,7 +19,8 @@ angular.module('CressApp')
         function getStudyLabels(id) {
             var deferred = $q.defer();
             $http
-                .get('http://localhost/cress-backend/getStudyPatientLabels.php?id='+id)
+                // .get('http://localhost/cress-backend/getStudyPatientLabels.php?id='+id)
+                .get('http://googleglass.cias.rit.edu/cress-backend/getStudyPatientLabels.php?id='+id)
                 .then(function(response){
                     deferred.resolve(response.data);
                 })
@@ -35,7 +36,8 @@ angular.module('CressApp')
         function getSinglePatientInfo(studyId, patientId) {
             var deferred = $q.defer();
             $http
-                .get('http://localhost/cress-backend/getPatientInfo.php?study_id='+studyId+'&patient_id='+patientId)
+                // .get('http://localhost/cress-backend/getPatientInfo.php?study_id='+studyId+'&patient_id='+patientId)
+                .get('http://googleglass.cias.rit.edu/cress-backend/getPatientInfo.php?study_id='+studyId+'&patient_id='+patientId)
                 .then(function(response){
                     deferred.resolve(response.data);
                 })
@@ -51,7 +53,8 @@ angular.module('CressApp')
         function getDropDownValues(studyId) {
             var deferred = $q.defer();
             $http
-                .get('http://localhost/cress-backend/getStudyDropdownValues.php?id='+studyId)
+                // .get('http://localhost/cress-backend/getStudyDropdownValues.php?id='+studyId)
+                .get('http://googleglass.cias.rit.edu/cress-backend/getStudyDropdownValues.php?id='+studyId)
                 .then(function(response){
                     deferred.resolve(response.data);
                 })
@@ -67,7 +70,8 @@ angular.module('CressApp')
         function savePatient(patient) {
             var deferred = $q.defer();
             $http
-                .post('http://localhost/cress-backend/savePatient.php', {patientObj: patient})
+                // .post('http://localhost/cress-backend/savePatient.php', {patientObj: patient})
+                .post('http://googleglass.cias.rit.edu/cress-backend/savePatient.php', {patientObj: patient})
                 .then(function(response){
                     deferred.resolve(response.data);
                 })

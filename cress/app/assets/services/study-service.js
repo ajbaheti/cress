@@ -14,7 +14,8 @@ angular.module('CressApp')
         function getStudies() {
             var deferred = $q.defer();
             $http
-                .get('http://localhost/cress-backend/getStudies.php')
+                // .get('http://localhost/cress-backend/getStudies.php')
+                .get('http://googleglass.cias.rit.edu/cress-backend/getStudies.php')
                 .then(function(response){
                     deferred.resolve(response.data);
                 })
@@ -30,7 +31,8 @@ angular.module('CressApp')
         function getPatientsForStudy(id) {
             var deferred = $q.defer();
             $http
-                .get('http://localhost/cress-backend/getPatientList.php?id='+id)
+                // .get('http://localhost/cress-backend/getPatientList.php?id='+id)
+                .get('http://googleglass.cias.rit.edu/cress-backend/getPatientList.php?id='+id)
                 .then(function(response){
                     deferred.resolve(response.data);
                 })

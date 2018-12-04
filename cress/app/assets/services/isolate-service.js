@@ -15,7 +15,8 @@ angular.module('CressApp')
         function getVisitSamples(visitId) {
             var deferred = $q.defer();
             $http
-                .get('http://localhost/cress-backend/getSamples.php?id=' + visitId)
+                // .get('http://localhost/cress-backend/getSamples.php?id=' + visitId)
+                .get('http://googleglass.cias.rit.edu/cress-backend/getSamples.php?id=' + visitId)
                 .then(function (response) {
                     deferred.resolve(response.data);
                 })
@@ -31,7 +32,8 @@ angular.module('CressApp')
         function findSampleById(sampleId) {
             var deferred = $q.defer();
             $http
-                .get('http://localhost/cress-backend/getIsolateById.php?id=' + sampleId)
+                // .get('http://localhost/cress-backend/getIsolateById.php?id=' + sampleId)
+                .get('http://googleglass.cias.rit.edu/cress-backend/getIsolateById.php?id=' + sampleId)
                 .then(function (response) {
                     deferred.resolve(response.data);
                 })
@@ -47,7 +49,8 @@ angular.module('CressApp')
         function getTestsForIsolate(id) {
             var deferred = $q.defer();
             $http
-                .get('http://localhost/cress-backend/getTestsForIsolate.php?id=' + id)
+                // .get('http://localhost/cress-backend/getTestsForIsolate.php?id=' + id)
+                .get('http://googleglass.cias.rit.edu/cress-backend/getTestsForIsolate.php?id=' + id)
                 .then(function (response) {
                     deferred.resolve(response.data);
                 })

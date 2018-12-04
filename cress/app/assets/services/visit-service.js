@@ -16,7 +16,8 @@ angular.module('CressApp')
         function getListOfVisits(patientId) {
             var deferred = $q.defer();
             $http
-                .get('http://localhost/cress-backend/getVisitsForPatient.php?id='+patientId)
+                .get('http://googleglass.cias.rit.edu/cress-backend/getVisitsForPatient.php?id='+patientId)
+                // .get('http://localhost/cress-backend/getVisitsForPatient.php?id='+patientId)
                 .then(function(response){
                     deferred.resolve(response.data);
                 })
@@ -32,7 +33,8 @@ angular.module('CressApp')
         function getVisitTypes() {
             var deferred = $q.defer();
             $http
-                .get('http://localhost/cress-backend/getVisitTypes.php')
+                // .get('http://localhost/cress-backend/getVisitTypes.php')
+                .get('http://googleglass.cias.rit.edu/cress-backend/getVisitTypes.php')
                 .then(function(response){
                     deferred.resolve(response.data);
                 })
@@ -48,7 +50,8 @@ angular.module('CressApp')
         function getDefaultVisitColumns() {
             var deferred = $q.defer();
             $http
-                .get('http://localhost/cress-backend/getVisitDefaultColumns.php')
+                // .get('http://localhost/cress-backend/getVisitDefaultColumns.php')
+                .get('http://googleglass.cias.rit.edu/cress-backend/getVisitDefaultColumns.php')
                 .then(function(response){
                     deferred.resolve(response.data);
                 })
@@ -64,7 +67,8 @@ angular.module('CressApp')
         function getGroupingDropDownValues() {
             var deferred = $q.defer();
             $http
-                .get('http://localhost/cress-backend/getGroupingDropdownValues.php')
+                // .get('http://localhost/cress-backend/getGroupingDropdownValues.php')
+                .get('http://googleglass.cias.rit.edu/cress-backend/getGroupingDropdownValues.php')
                 .then(function(response){
                     deferred.resolve(response.data);
                 })
@@ -80,7 +84,8 @@ angular.module('CressApp')
         function getVisitTypeGroupings(visitTypes) {
             var deferred = $q.defer();
             $http
-                .get('http://localhost/cress-backend/getVisitTypeGroupings.php?idList='+visitTypes)
+                // .get('http://localhost/cress-backend/getVisitTypeGroupings.php?idList='+visitTypes)
+                .get('http://googleglass.cias.rit.edu/cress-backend/getVisitTypeGroupings.php?idList='+visitTypes)
                 .then(function(response){
                     deferred.resolve(response.data);
                 })

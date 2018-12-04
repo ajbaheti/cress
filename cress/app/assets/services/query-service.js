@@ -12,7 +12,8 @@ angular.module('CressApp')
         function getQueryFields() {
             var deferred = $q.defer();
             $http
-                .get('http://localhost/cress-backend/getQueryFields.php')
+                // .get('http://localhost/cress-backend/getQueryFields.php')
+                .get('http://googleglass.cias.rit.edu/cress-backend/getQueryFields.php')
                 .then(function(response){
                     deferred.resolve(response.data);
                 })

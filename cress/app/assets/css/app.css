@@ -60,3 +60,7 @@
 .queryMarginBottom {
     margin-bottom: 0;
 }
+
+.query-chips md-chips .md-chips {
+    box-shadow: none !important;
+}

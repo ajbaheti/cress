@@ -14,7 +14,7 @@
         </md-toolbar>
 
         <div class="md-padding" layout="row">
-            <div layout="column" class="md-padding" flex="70" style="border:1px solid lightgrey;">
+            <md-content layout="column" class="md-padding query-chips" flex="70" style="border:1px solid lightgrey;height:500px;">
                 <div class="query-heading">All Fields</div>
                 <md-chips ng-model="allFields" readonly=true md-removable=false>
                     <md-chip-template>
@@ -23,16 +23,16 @@
                                  style="outline:none;cursor:pointer;">add</md-icon>
                     </md-chip-template>
                 </md-chips>
-            </div>
+            </md-content>
             <div flex="5"></div>
-            <div layout="column" class="md-padding" flex="25" style="border:1px solid lightgrey;">
+            <md-content layout="column" class="md-padding query-chips" flex="25" style="border:1px solid lightgrey;height:500px;">
                 <div class="query-heading">Fields to Query</div>
                 <md-chips ng-model="queryFields" readonly=true md-removable=true md-on-remove="removeFromQueryFields($chip)">
                     <md-chip-template>
                         <span>{{$chip.field_name}}</span>
                     </md-chip-template>
                 </md-chips>
-            </div>
+            </md-content>
         </div>
 
         <div layout="column" style="border:3px solid lightgrey;padding:16px;" ng-repeat="row in rows"
