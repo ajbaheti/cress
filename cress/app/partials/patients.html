@@ -35,7 +35,7 @@
                     <label>Patient Id</label>
                     <md-select ng-model="selectedPatient" ng-change="onPatientSelect(selectedPatient)">
                         <md-option ng-repeat="patient in patients" ng-value="patient">
-                            {{patient.patient_id}}
+                            {{patient.subjectId}}
                         </md-option>
                     </md-select>
                 </md-input-container>

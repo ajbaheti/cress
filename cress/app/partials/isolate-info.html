@@ -21,15 +21,15 @@
             </div>
             <div layout="row" ng-if="showAddIsolate" layout-margin>
                 <md-input-container flex="25">
-                    <label>Select the Isolate</label>
-                    <md-select ng-model="newRow.test_type" aria-label="new sample type">
-                        <md-option ng-repeat="ty in types" ng-value="ty">{{ty}}</md-option>
+                    <label>Isolate Type</label>
+                    <md-select ng-model="newRow.bacteriaType" aria-label="new sample type">
+                        <md-option ng-repeat="ty in dropdowns.bacteriaType" ng-value="ty">{{ty}}</md-option>
                     </md-select>
                 </md-input-container>
                 <md-input-container flex="25">
-                    <label>Location of Sample</label>
-                    <md-select ng-model="newRow.location" aria-label="new sample location">
-                        <md-option ng-repeat="loc in locations" ng-value="loc">{{loc}}</md-option>
+                    <label>Isolate Location</label>
+                    <md-select ng-model="newRow.isolateLocation" aria-label="new sample location">
+                        <md-option ng-repeat="loc in dropdowns.isolateLocation" ng-value="loc">{{loc}}</md-option>
                     </md-select>
                 </md-input-container>
                 <md-input-container flex="25">
@@ -58,30 +58,32 @@
                 <tbody md-body>
                     <tr md-row ng-if="isolates.length > 0" ng-repeat="isolate in isolates">
                         <td md-cell>
-                            <md-select ng-model="isolate.test_type" ng-disabled="isolate.editable === 'false'"
+                            <!--ng-disabled="isolate.editable === 'false'"-->
+                            <md-select ng-model="isolate.bacteriaType"
                                        aria-label="sample type" ng-change="changeInIsolateRow(isolate)">
-                                <md-option ng-repeat="ty in types" ng-value="ty">{{ty}}</md-option>
+                                <md-option ng-repeat="ty in dropdowns.bacteriaType" ng-value="ty">{{ty}}</md-option>
                             </md-select>
                         </td>
                         <td md-cell>
-                            <md-select ng-model="isolate.location" ng-disabled="isolate.editable === 'false'"
+                            <!--ng-disabled="isolate.editable === 'false'"-->
+                            <md-select ng-model="isolate.isolateLocation"
                                        aria-label="sample location" ng-change="changeInIsolateRow(isolate)">
-                                <md-option ng-repeat="loc in locations" ng-value="loc">{{loc}}</md-option>
+                                <md-option ng-repeat="loc in dropdowns.isolateLocation" ng-value="loc">{{loc}}</md-option>
                             </md-select>
                         </td>
                         <td md-cell>
-                            <input ng-model="isolate.notation" ng-change="changeInIsolateRow(isolate)" style="outline:none;"/>
+                            <input ng-model="isolate.isolateNotation" ng-change="changeInIsolateRow(isolate)" style="outline:none;"/>
                         </td>
                         <td md-cell style="color:blue;cursor:pointer;outline:none;" ng-click="goToTestInfo(isolate.test_id)">
-                            {{isolate.test_id}}</td>
+                            {{isolate.TestId}}</td>
                         <td md-cell>
                             <div layout="row" style="width:100px;text-align:right;">
                                 <md-icon class="material-icons" ng-click="saveIsolate(isolate)" ng-show="isolate.showSave"
                                          style="outline:none;cursor:pointer;margin:0;width:50px;text-align:center;">
                                     save</md-icon>
                                 <md-icon class="material-icons" style="outline:none;cursor:pointer;margin:0;width:50px;text-align:center;"
-                                     ng-click="deleteIsolate(isolate)" ng-show="isolate.editable === 'true'">
-                                delete</md-icon>
+                                     ng-click="deleteIsolate(isolate)">
+                                delete</md-icon> <!-- ng-show="isolate.editable === 'true'" -->
                             </div>
                         </td>
                     </tr>
@@ -91,6 +93,7 @@
                 </tbody>
             </table>
         </md-table-container>
+
     </md-content>
 
 </div>

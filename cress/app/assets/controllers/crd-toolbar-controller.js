@@ -29,7 +29,7 @@
             };
 
             $scope.goToHome = function() {
-                $location.path('/');
+                $location.path('/patients');
             };
 
             $scope.logOut = function() {

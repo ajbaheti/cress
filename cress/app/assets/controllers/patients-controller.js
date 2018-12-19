@@ -7,18 +7,28 @@ angular.module('CressApp')
             $location.path(RedirectPath);
         }
 
-        $scope.patients = PatientService.patientList;
+        // get the list of patients
+        PatientService
+            .getListOfPatients()
+            .then(function(patients){
+                if(patients !== 'No patients found'){
+                    $scope.patients = patients;
+                }
+            })
+            .catch(function(err){
+                console.log(err);
+            });
+
     	$scope.editPatient = true;
         $scope.dropDownObjects = {};
-        $scope.selectedPatient = null;
+        // $scope.selectedPatient = null;
 
         // get the list of labels to be displayed for patient
         PatientService
-            .getStudyLabels(StudyService.selectedStudy.study_id)
+            .getPatientLabels()
             .then(function(labels){
-                if(labels){
+                if(labels !== 'No labels found'){
                     PatientService.currentPatientLabels = labels;
-                    // console.log(labels);
                 }
             })
             .catch(function(err){
@@ -27,19 +37,18 @@ angular.module('CressApp')
 
         // get values of all the patient drop down fields and prepare them to be used directly in patients-info
         PatientService
-            .getDropDownValues(StudyService.selectedStudy.study_id)
+            .getPatientDropdownValues()
             .then(function(result){
                 if(result){
-                    // get all drop down values for current study and find all unique labels
-                    var studyLabelIds = result.map(function(obj){
-                        return {id: obj.study_label_id, lbl_text: obj.label_text};
+                    var patientLabelIds = result.map(function(obj){
+                        return {lbl_text: obj.LabelText};
                     });
-                    var uniqueLabelIds = removeDuplicates(studyLabelIds, "id");
+                    var uniqueLabels = removeDuplicates(patientLabelIds, "lbl_text");
 
                     //for each label (drop down), create separate array with values
-                    uniqueLabelIds.forEach(function(lbl){
+                    uniqueLabels.forEach(function(lbl){
                         $scope.dropDownObjects[''+lbl.lbl_text] = result.filter(function(obj){
-                            return obj.study_label_id === lbl.id;
+                            return obj.LabelText === lbl.lbl_text;
                         });
                     });
                     PatientService.patientDropDownObjects = $scope.dropDownObjects;
@@ -50,10 +59,10 @@ angular.module('CressApp')
             });
 
         $scope.onPatientSelect = function(patient) {
-            $scope.selectedPatient = patient;
-            PatientService.selectedPatientId = $scope.selectedPatient.patient_id;
+            // $scope.selectedPatient = patient;
+            PatientService.selectedPatientId = patient.subjectId;
             $location.path('/patient-info');
-            return $scope.selectedPatient;
+            return patient;
         };
 
         function removeDuplicates(myArr, prop) {

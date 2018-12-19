@@ -16,8 +16,9 @@ angular.module('CressApp')
         function getListOfVisits(patientId) {
             var deferred = $q.defer();
             $http
-                .get('http://googleglass.cias.rit.edu/cress-backend/getVisitsForPatient.php?id='+patientId)
+                // .get('http://googleglass.cias.rit.edu/cress-backend/getVisitsForPatient.php?id='+patientId)
                 // .get('http://localhost/cress-backend/getVisitsForPatient.php?id='+patientId)
+                .get('http://localhost/cress-backend-new/getVisitsForPatient.php?id='+patientId)
                 .then(function(response){
                     deferred.resolve(response.data);
                 })

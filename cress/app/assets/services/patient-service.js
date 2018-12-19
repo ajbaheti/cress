@@ -8,70 +8,83 @@ angular.module('CressApp')
             selectedPatientId: null,
             currentPatientLabels: null,
             patientDropDownObjects: null,
-            getStudyLabels: getStudyLabels,
+            getListOfPatients: getListOfPatients,
+            getPatientLabels: getPatientLabels,
             getSinglePatientInfo: getSinglePatientInfo,
-            getDropDownValues: getDropDownValues,
+            getPatientDropdownValues: getPatientDropdownValues,
             savePatient: savePatient
         };
 
         return service;
 
-        function getStudyLabels(id) {
+        function getListOfPatients() {
             var deferred = $q.defer();
             $http
-                // .get('http://localhost/cress-backend/getStudyPatientLabels.php?id='+id)
-                .get('http://googleglass.cias.rit.edu/cress-backend/getStudyPatientLabels.php?id='+id)
+                .get('http://localhost/cress-backend-new/Subject/getPatientList.php')
                 .then(function(response){
                     deferred.resolve(response.data);
                 })
                 .catch(function(err){
-                    console.log("Error in patient-service - getStudyLabels");
+                    console.log("Error in patient-service - getListOfPatients");
                     console.log(err);
-                    deferred.reject("Error in patient-service - getStudyLabels");
+                    deferred.reject("Error in patient-service - getListOfPatients");
                 });
 
-            return deferred.promise
+            return deferred.promise;
         }
 
-        function getSinglePatientInfo(studyId, patientId) {
+        function getPatientLabels() {
             var deferred = $q.defer();
             $http
-                // .get('http://localhost/cress-backend/getPatientInfo.php?study_id='+studyId+'&patient_id='+patientId)
-                .get('http://googleglass.cias.rit.edu/cress-backend/getPatientInfo.php?study_id='+studyId+'&patient_id='+patientId)
+                .get('http://localhost/cress-backend-new/Subject/getPatientLabels.php')
                 .then(function(response){
                     deferred.resolve(response.data);
                 })
                 .catch(function(err){
-                    console.log("Error in patient-service - getStudyLabels");
+                    console.log("Error in patient-service - getPatientLabels");
                     console.log(err);
-                    deferred.reject("Error in patient-service - getStudyLabels");
+                    deferred.reject("Error in patient-service - getPatientLabels");
                 });
 
-            return deferred.promise
+            return deferred.promise;
         }
 
-        function getDropDownValues(studyId) {
+        function getSinglePatientInfo(patientId) {
             var deferred = $q.defer();
             $http
-                // .get('http://localhost/cress-backend/getStudyDropdownValues.php?id='+studyId)
-                .get('http://googleglass.cias.rit.edu/cress-backend/getStudyDropdownValues.php?id='+studyId)
+                .get('http://localhost/cress-backend-new/Subject/getSinglePatientInfo.php?patient_id='+patientId)
                 .then(function(response){
                     deferred.resolve(response.data);
                 })
                 .catch(function(err){
-                    console.log("Error in patient-service - getDropDownValues");
+                    console.log("Error in patient-service - getSinglePatientInfo");
                     console.log(err);
-                    deferred.reject("Error in patient-service - getDropDownValues");
+                    deferred.reject("Error in patient-service - getSinglePatientInfo");
                 });
 
-            return deferred.promise
+            return deferred.promise;
+        }
+
+        function getPatientDropdownValues() {
+            var deferred = $q.defer();
+            $http
+                .get('http://localhost/cress-backend-new/Subject/getPatientDropdownValues.php')
+                .then(function(response){
+                    deferred.resolve(response.data);
+                })
+                .catch(function(err){
+                    console.log("Error in patient-service - getPatientDropdownValues");
+                    console.log(err);
+                    deferred.reject("Error in patient-service - getPatientDropdownValues");
+                });
+
+            return deferred.promise;
         }
 
         function savePatient(patient) {
             var deferred = $q.defer();
             $http
-                // .post('http://localhost/cress-backend/savePatient.php', {patientObj: patient})
-                .post('http://googleglass.cias.rit.edu/cress-backend/savePatient.php', {patientObj: patient})
+                .post('http://localhost/cress-backend-new/Subject/savePatient.php', {patient})
                 .then(function(response){
                     deferred.resolve(response.data);
                 })
@@ -81,7 +94,7 @@ angular.module('CressApp')
                     deferred.reject("Error in patient-service - savePatient");
                 });
 
-            return deferred.promise
+            return deferred.promise;
         }
 
     });

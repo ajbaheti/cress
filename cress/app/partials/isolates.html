@@ -7,15 +7,15 @@
                 <div class="md-toolbar-tools">
                     <div layout="column" flex>
                         <h2>Isolate Information</h2>
-                        <div class="md-caption" style="padding-bottom: 0;">Find isolate/sample</div>
+                        <div class="md-caption" style="padding-bottom: 0;">Find by Sample</div>
                     </div>
                 </div>
             </md-toolbar>
 
             <div layout="row" style="padding:8px;margin-top: 0">
                 <md-input-container flex="50" style="margin:8px;">
-                    <label>Isolate Id</label>
-                    <input ng-model="isolateId" required />
+                    <label>Sample Id</label>
+                    <input ng-model="sampleId" required />
                     <!--<md-select ng-model="selectedPatient" ng-change="onPatientSelect(selectedPatient)">
                         <md-option ng-repeat="patient in patients" ng-value="{{patient}}">
                             {{patient.patient_id}}
@@ -26,5 +26,27 @@
             </div>
         </div>
     </md-content>
+
+    <!--<div layout="column" layout-margin class="md-padding" md-whiteframe="2dp" style="margin-top:16px;"
+        ng-if="samples.length > 0">
+
+        <md-table-container>
+            <table md-table>
+                <thead md-head>
+                    <tr md-row>
+                        <th md-column>Isolate Id</th>
+                    </tr>
+                </thead>
+
+                <tbody md-body>
+                    <tr md-row ng-repeat="sample in samples track by $index">
+                        <td md-cell style="outline:none;cursor:pointer;color:blue;text-decoration:underline;"
+                            ng-click="goToIsolate(sample, $event)">{{sample.IsolateId}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </md-table-container>
+
+    </div>-->
 
 </div>

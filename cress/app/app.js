@@ -11,13 +11,10 @@ cressApp.config(function($routeProvider) {
                     AuthService.user.username = sessionObj.user;
                     AuthService.user.isAdmin = sessionObj.admin === "1";
                     switch($route.current.$$route.originalPath){
-                        case '/':
-                            return '/';
+                        /*case '/':
+                            return '/';*/
                         case '/patients':
-                            if(PatientService.patientList){
-                                return '/patients';
-                            }
-                            return '/';
+                            return '/patients';
                         case '/patient-info':
                             if(PatientService.selectedPatientId){
                                 return '/patient-info';
@@ -26,25 +23,25 @@ cressApp.config(function($routeProvider) {
                         case '/isolates':
                             return '/isolates';
                         case '/isolate-info':
-                            if(IsolateService.selectedIsolate){
+                            if(IsolateService.sampleId){
                                 return '/isolate-info';
                             }
                             return '/isolates';
                         case '/tests':
                             return '/tests';
                         case '/test-info':
-                            if(TestsService.selectedTestInfo){
+                            if(TestsService.tests){
                                 return '/test-info';
                             }
                             return '/tests';
-                        case '/reports':
-                            return '/reports';
+                        /*case '/reports':
+                            return '/reports';*/
                         case '/query':
                             return '/query';
                         case '/admin':
                             return '/admin';
                         default:
-                            return '/';
+                            return '/patients';
                     }
                 }
                 else {
@@ -57,13 +54,13 @@ cressApp.config(function($routeProvider) {
     }];
 
     $routeProvider
-	    .when('/', {
+	    /*.when('/', {
 	        templateUrl : 'app/partials/home.html',
 	        controller: 'HomeCtrl',
 			resolve: {
 	        	RedirectPath: CURRENT_PATH_RESOLVER
 			}
-	    })
+	    })*/
 
 	    .when('/login', {
 	        templateUrl : 'app/partials/login.html',
@@ -102,13 +99,13 @@ cressApp.config(function($routeProvider) {
             }
         })
 
-        .when('/reports', {
+        /*.when('/reports', {
             templateUrl : 'app/partials/reports.html',
             controller: 'ReportsCtrl',
             resolve: {
                 RedirectPath: CURRENT_PATH_RESOLVER
             }
-        })
+        })*/
 
         .when('/tests', {
             templateUrl : 'app/partials/tests.html',

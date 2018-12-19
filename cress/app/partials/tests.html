@@ -12,18 +12,23 @@
                 </div>
             </md-toolbar>
 
-            <div layout="row" style="padding:8px;margin-top: 0">
-                <md-input-container flex="50" style="margin:8px;">
-                    <label>Test Id</label>
-                    <input ng-model="testId" required />
-                    <!--<md-select ng-model="selectedPatient" ng-change="onPatientSelect(selectedPatient)">
-                        <md-option ng-repeat="patient in patients" ng-value="{{patient}}">
-                            {{patient.patient_id}}
-                        </md-option>
-                    </md-select>-->
-                </md-input-container>
-                <md-button class="md-primary md-raised" style="height:36px;" ng-click="getTestInfo()">
-                    Search</md-button>
+            <div layout="column" style="padding:8px;margin-top: 0">
+                <div layout="row" style="margin:8px;">
+                    <label style="margin-right:16px;">Search Criteria</label>
+                    <md-radio-group ng-model="searchCriteria" layout="row">
+                        <md-radio-button value="SAMPLE" class="md-primary">Sample</md-radio-button>
+                        <md-radio-button value="ISOLATE" class="md-primary"> Isolate </md-radio-button>
+                    </md-radio-group>
+                </div>
+                <div layout="row">
+                    <md-input-container flex="50" style="margin:8px;">
+                        <label ng-show="searchCriteria === 'SAMPLE'">Sample Id</label>
+                        <label ng-show="searchCriteria !== 'SAMPLE'">Isolate Id</label>
+                        <input ng-model="idToSearch" required />
+                    </md-input-container>
+                    <md-button class="md-primary md-raised" style="height:36px;" ng-click="getTestInfo()">
+                        Search</md-button>
+                </div>
             </div>
         </div>
     </md-content>

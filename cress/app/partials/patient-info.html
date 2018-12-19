@@ -16,33 +16,33 @@
         <div layout="row" layout-xs="column" style="padding:0 8px;margin-top:8px;">
             <div layout="column" flex="50" flex-xs="100" class="md-padding">
                 <md-input-container ng-repeat="obj in leftLabelList" class="hide-validation-error">
-                    <label class="label-overflow">{{obj.display_text}}</label>
-                    <input ng-model="patientInfoObj[''+obj.db_field]"
-                           ng-if="obj.label_type === 'single' && obj.is_required === '0'" />
-                    <input ng-model="patientInfoObj[''+obj.db_field]"
-                           ng-if="obj.label_type === 'single' && obj.is_required === '1'" required/>
-                    <md-datepicker ng-model="patientInfoObj[''+obj.db_field]"
-                                   ng-if="obj.label_type === 'date' && obj.is_required === '0'"></md-datepicker>
-                    <md-datepicker ng-model="patientInfoObj[''+obj.db_field]" required
-                                   ng-if="obj.label_type === 'date' && obj.is_required === '1'"></md-datepicker>
-                    <md-select ng-model="patientInfoObj[''+obj.db_field]"
-                               ng-if="obj.label_type === 'multiple' && obj.is_required === '0'">
-                        <md-option ng-repeat="a in patientDropDownValues[''+obj.label_text]" ng-value="a.value">{{a.value}}</md-option>
+                    <label class="label-overflow">{{obj.DisplayName}}</label>
+                    <input ng-model="patientInfoObj[''+obj.LabelText]"
+                           ng-if="obj.LabelType === 'single' && obj.IsRequired === '0'" />
+                    <input ng-model="patientInfoObj[''+obj.LabelText]"
+                           ng-if="obj.LabelType === 'single' && obj.IsRequired === '1'" required/>
+                    <md-datepicker ng-model="patientInfoObj[''+obj.LabelText]"
+                                   ng-if="obj.LabelType === 'date' && obj.IsRequired === '0'"></md-datepicker>
+                    <md-datepicker ng-model="patientInfoObj[''+obj.LabelText]" required
+                                   ng-if="obj.LabelType === 'date' && obj.IsRequired === '1'"></md-datepicker>
+                    <md-select ng-model="patientInfoObj[''+obj.LabelText]"
+                               ng-if="obj.LabelType === 'multiple' && obj.IsRequired === '0'">
+                        <md-option ng-repeat="a in patientDropDownValues[''+obj.LabelText]" ng-value="a.Value">{{a.Value}}</md-option>
                     </md-select>
-                    <md-select ng-model="patientInfoObj[''+obj.db_field]"
-                               ng-if="obj.label_type === 'multiple' && obj.is_required === '1'" required>
-                        <md-option ng-repeat="a in patientDropDownValues[''+obj.label_text]" ng-value="a.value">{{a.value}}</md-option>
+                    <md-select ng-model="patientInfoObj[''+obj.LabelText]"
+                               ng-if="obj.LabelType === 'multiple' && obj.IsRequired === '1'" required>
+                        <md-option ng-repeat="a in patientDropDownValues[''+obj.LabelText]" ng-value="a.Value">{{a.Value}}</md-option>
                     </md-select>
-                    <md-select ng-model="patientInfoObj[''+obj.db_field]" multiple="true"
-                               ng-if="obj.label_type === 'multiselect' && obj.is_required === '0'">
-                        <md-option ng-repeat="a in patientDropDownValues[''+obj.label_text]" ng-value="a.value">{{a.value}}</md-option>
+                    <md-select ng-model="patientInfoObj[''+obj.LabelText]" multiple="true"
+                               ng-if="obj.LabelType === 'multiselect' && obj.IsRequired === '0'">
+                        <md-option ng-repeat="a in patientDropDownValues[''+obj.LabelText]" ng-value="a.Value">{{a.Value}}</md-option>
                     </md-select>
-                    <md-select ng-model="patientInfoObj[''+obj.db_field]" multiple="true"
-                               ng-if="obj.label_type === 'multiselect' && obj.is_required === '1'" required>
-                        <md-option ng-repeat="a in patientDropDownValues[''+obj.label_text]" ng-value="a.value">{{a.value}}</md-option>
+                    <md-select ng-model="patientInfoObj[''+obj.LabelText]" multiple="true"
+                               ng-if="obj.LabelType === 'multiselect' && obj.IsRequired === '1'" required>
+                        <md-option ng-repeat="a in patientDropDownValues[''+obj.LabelText]" ng-value="a.Value">{{a.Value}}</md-option>
                     </md-select>
-                    <md-chips ng-model="patientInfoObj[''+obj.db_field]" md-removable="true" readonly="true"
-                              ng-if="obj.label_type === 'multiselect' && patientInfoObj[''+obj.db_field].length > 0">
+                    <md-chips ng-model="patientInfoObj[''+obj.LabelText]" md-removable="true" readonly="true"
+                              ng-if="obj.LabelType === 'multiselect' && patientInfoObj[''+obj.LabelText].length > 0">
                         <md-chip-template>
                             <span>{{$chip}}</span>
                         </md-chip-template>
@@ -51,33 +51,33 @@
             </div>
             <div layout="column" flex="50" flex-xs="100" class="md-padding">
                 <md-input-container ng-repeat="obj in rightLabelList" class="hide-validation-error">
-                    <label class="label-overflow">{{obj.display_text}}</label>
-                    <input ng-model="patientInfoObj[''+obj.db_field]"
-                           ng-if="obj.label_type === 'single' && obj.is_required === '0'" />
-                    <input ng-model="patientInfoObj[''+obj.db_field]"
-                           ng-if="obj.label_type === 'single' && obj.is_required === '1'" required/>
-                    <md-datepicker ng-model="patientInfoObj[''+obj.db_field]"
-                                   ng-if="obj.label_type === 'date' && obj.is_required === '0'"></md-datepicker>
-                    <md-datepicker ng-model="patientInfoObj[''+obj.db_field]" required
-                                   ng-if="obj.label_type === 'date' && obj.is_required === '1'"></md-datepicker>
-                    <md-select ng-model="patientInfoObj[''+obj.db_field]"
-                               ng-if="obj.label_type === 'multiple' && obj.is_required === '0'">
-                        <md-option ng-repeat="a in patientDropDownValues[''+obj.label_text]" ng-value="a.value">{{a.value}}</md-option>
+                    <label class="label-overflow">{{obj.DisplayName}}</label>
+                    <input ng-model="patientInfoObj[''+obj.LabelText]"
+                           ng-if="obj.LabelType === 'single' && obj.IsRequired === '0'" />
+                    <input ng-model="patientInfoObj[''+obj.LabelText]"
+                           ng-if="obj.LabelType === 'single' && obj.IsRequired === '1'" required/>
+                    <md-datepicker ng-model="patientInfoObj[''+obj.LabelText]"
+                                   ng-if="obj.LabelType === 'date' && obj.IsRequired === '0'"></md-datepicker>
+                    <md-datepicker ng-model="patientInfoObj[''+obj.LabelText]" required
+                                   ng-if="obj.LabelType === 'date' && obj.IsRequired === '1'"></md-datepicker>
+                    <md-select ng-model="patientInfoObj[''+obj.LabelText]"
+                               ng-if="obj.LabelType === 'multiple' && obj.IsRequired === '0'">
+                        <md-option ng-repeat="a in patientDropDownValues[''+obj.LabelText]" ng-value="a.Value">{{a.Value}}</md-option>
                     </md-select>
-                    <md-select ng-model="patientInfoObj[''+obj.db_field]" required
-                               ng-if="obj.label_type === 'multiple' && obj.is_required === '1'">
-                        <md-option ng-repeat="a in patientDropDownValues[''+obj.label_text]" ng-value="a.value">{{a.value}}</md-option>
+                    <md-select ng-model="patientInfoObj[''+obj.LabelText]" required
+                               ng-if="obj.LabelType === 'multiple' && obj.IsRequired === '1'">
+                        <md-option ng-repeat="a in patientDropDownValues[''+obj.LabelText]" ng-value="a.Value">{{a.Value}}</md-option>
                     </md-select>
-                    <md-select ng-model="patientInfoObj[''+obj.db_field]" multiple="true"
-                               ng-if="obj.label_type === 'multiselect' && obj.is_required === '0'">
-                        <md-option ng-repeat="a in patientDropDownValues[''+obj.label_text]" ng-value="a.value">{{a.value}}</md-option>
+                    <md-select ng-model="patientInfoObj[''+obj.LabelText]" multiple="true"
+                               ng-if="obj.LabelType === 'multiselect' && obj.IsRequired === '0'">
+                        <md-option ng-repeat="a in patientDropDownValues[''+obj.LabelText]" ng-value="a.Value">{{a.Value}}</md-option>
                     </md-select>
-                    <md-select ng-model="patientInfoObj[''+obj.db_field]" multiple="true"
-                               ng-if="obj.label_type === 'multiselect' && obj.is_required === '1'" required>
-                        <md-option ng-repeat="a in patientDropDownValues[''+obj.label_text]" ng-value="a.value">{{a.value}}</md-option>
+                    <md-select ng-model="patientInfoObj[''+obj.LabelText]" multiple="true"
+                               ng-if="obj.LabelType === 'multiselect' && obj.IsRequired === '1'" required>
+                        <md-option ng-repeat="a in patientDropDownValues[''+obj.LabelText]" ng-value="a.Value">{{a.Value}}</md-option>
                     </md-select>
-                    <md-chips ng-model="patientInfoObj[''+obj.db_field]" md-removable="true" readonly="true"
-                              ng-disabled=true ng-if="obj.label_type === 'multiselect' && patientInfoObj[''+obj.db_field].length > 0">
+                    <md-chips ng-model="patientInfoObj[''+obj.LabelText]" md-removable="true" readonly="true"
+                              ng-disabled=true ng-if="obj.LabelType === 'multiselect' && patientInfoObj[''+obj.LabelText].length > 0">
                         <md-chip-template style="outline:none;">
                             <span>{{$chip}}</span>
                         </md-chip-template>
@@ -109,11 +109,16 @@
         <md-table-container>
             <table md-table>
                 <thead md-head>
-                    <tr md-row>
+                    <!--<tr md-row>
                         <th md-column ng-repeat="col in visitColumns" ng-if="col.clickable !== 'true'">
                             {{col.col_display_name}}</th>
                         <th md-column ng-repeat="col in visitColumns" ng-if="col.clickable === 'true'">
                             {{col.col_display_name}}</th>
+                    </tr>-->
+                    <tr md-row>
+                        <th md-column>Visit Date</th>
+                        <th md-column>Visit Type</th>
+                        <th md-column>Visit Id</th>
                     </tr>
                 </thead>
                 <tbody md-body ng-if="visits.length === 0">
@@ -122,14 +127,20 @@
                     </tr>
                 </tbody>
                 <tbody md-body ng-if="visits.length > 0">
-                    <tr md-row ng-repeat="visit in visits track by $index">
+                    <!--<tr md-row ng-repeat="visit in visits track by $index">
                         <td md-cell ng-repeat="col in visitColumns" ng-if="col.clickable !== 'true'">
-                            {{visit[''+col.col_db_field]}}
+                            {{visit[''+col.col_LabelText]}}
                         </td>
                         <td md-cell ng-click="goToVisit(visit, $event)" ng-if="col.clickable === 'true'"
                             ng-repeat="col in visitColumns" style="outline:none;cursor:pointer;color:blue;text-decoration:underline;">
-                            {{visit[''+col.col_db_field]}}
+                            {{visit[''+col.col_LabelText]}}
                         </td>
+                    </tr>-->
+                    <tr md-row ng-repeat="visit in visits track by $index">
+                        <td md-cell>{{visit.visit_date | date: 'yyyy-mm-dd'}}</td>
+                        <td md-cell>{{visit.visitType}}</td>
+                        <td md-cell style="outline:none;cursor:pointer;color:blue;text-decoration:underline;"
+                            ng-click="goToVisit(visit, $event)">{{visit.visitId}}</td>
                     </tr>
                 </tbody>
             </table>

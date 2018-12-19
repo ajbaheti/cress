@@ -19,7 +19,7 @@ angular.module('CressApp')
                         $scope.error = null;
                         AuthService.user.username = user.user_name;
                         AuthService.user.isAdmin = user.is_admin === "1";
-						$location.path('/');
+						$location.path('/patients');
 					}
 				})
 				.catch(function(){

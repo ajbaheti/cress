@@ -14,34 +14,27 @@
         </md-toolbar>
 
         <div layout="row">
-            <md-button class="md-primary md-raised" ng-click="saveAllTests()">Save All</md-button>
+            <md-button class="md-primary md-raised" ng-disabled="enableSave()" ng-click="saveAllTests()">
+                Save All</md-button>
         </div>
 
         <md-table-container>
             <table md-table>
                 <thead md-head>
                     <tr md-row>
-                        <th md-column>Type</th>
-                        <th md-column>Results</th>
-                        <th md-column>Units</th>
-                        <th md-column>Notation</th>
-                        <th md-column>Researcher</th>
+                        <th md-column ng-repeat="column in columnMetadata">{{column.DisplayName}}</th>
                     </tr>
                 </thead>
                 <tbody md-body>
                     <tr md-row ng-repeat="test in allTests">
-                        <td md-cell>{{test.test_type}}</td>
-                        <td md-cell>
-                            <input ng-model="test.test_results" style="outline:none;"/>
-                        </td>
-                        <td md-cell>
-                            <input ng-model="test.test_unit" style="outline:none;"/>
-                        </td>
-                        <td md-cell>
-                            <input ng-model="test.test_notation" style="outline:none;"/>
-                        </td>
-                        <td md-cell>
-                            <input ng-model="test.researcher" style="outline:none;"/>
+                        <td md-cell ng-repeat="columnName in columnMetadata">
+                            <label ng-if="columnName.DataType === 'text'">{{test[columnName.LabelText]}}</label>
+                            <input ng-if="columnName.DataType === 'single'" ng-model="test[columnName.LabelText]" style="outline:none;"/>
+                            <md-select ng-if="columnName.DataType === 'multiple'" ng-model="test[columnName.LabelText]"
+                                aria-laebl="test unit select" placeholder="Select value">
+                                <md-option ng-repeat="a in testDropDownValues[columnName.LabelText]" ng-value="a.Value">
+                                    {{a.Value}}</md-option>
+                            </md-select>
                         </td>
                     </tr>
                 </tbody>
@@ -49,7 +42,8 @@
         </md-table-container>
 
         <div layout="row">
-            <md-button class="md-primary md-raised" ng-click="saveAllTests()">Save All</md-button>
+            <md-button class="md-primary md-raised" ng-disabled="enableSave()" ng-click="saveAllTests()">
+                Save All</md-button>
         </div>
 
     </md-content>
