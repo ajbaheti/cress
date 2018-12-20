@@ -86,17 +86,17 @@
                 <div layout="row" ng-repeat="sample in samples" style="padding:4px 0;">
                     <md-checkbox ng-disabled="sample.editable === 'false'" flex="40" style="margin-top:8px;"
                                  ng-model="sample.isChecked" ng-change="sampleValueChanged(sample)">
-                        {{sample.sample_name}}</md-checkbox>
+                        {{sample.sample_type_code}}</md-checkbox>
                     <div layout="row" flex="60" ng-if="sample.isChecked">
                         <div flex="70" layout="row">
                             <div style="margin-top:8px;"> Notation: </div>
-                            <input ng-model="sample.notation" ng-disabled="sample.editable === 'false'"
+                            <input ng-model="sample.Notation" ng-disabled="sample.editable === 'false'"
                                    style="margin-left:4px;height:32px;"/>
                         </div>
                         <div flex="30" layout="row" style="margin-top:8px;margin-left:16px;">
                             <div>Id: </div>
                             <div style="margin-left:4px;outline:none;cursor:pointer;color:blue;text-decoration:underline;"
-                                    ng-click="goToSample(sample)">{{sample.sample_id}}</div>
+                                    ng-click="goToIsolate(sample)">{{sample.SampleId}}</div>
                         </div>
                     </div>
                 </div>
@@ -109,4 +109,5 @@
 
         </div>
     </md-dialog-content>
+
 </md-dialog>

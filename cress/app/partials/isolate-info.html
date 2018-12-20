@@ -20,27 +20,32 @@
                 <div flex></div>
             </div>
             <div layout="row" ng-if="showAddIsolate" layout-margin>
-                <md-input-container flex="25">
-                    <label>Isolate Type</label>
-                    <md-select ng-model="newRow.bacteriaType" aria-label="new sample type">
-                        <md-option ng-repeat="ty in dropdowns.bacteriaType" ng-value="ty">{{ty}}</md-option>
-                    </md-select>
-                </md-input-container>
-                <md-input-container flex="25">
-                    <label>Isolate Location</label>
-                    <md-select ng-model="newRow.isolateLocation" aria-label="new sample location">
-                        <md-option ng-repeat="loc in dropdowns.isolateLocation" ng-value="loc">{{loc}}</md-option>
-                    </md-select>
-                </md-input-container>
-                <md-input-container flex="25">
-                    <label>Notation</label>
-                    <input ng-model="newRow.notation" style="outline:none;"/>
-                </md-input-container>
-                <md-input-container flex="10">
-                    <label>Test Id</label>
-                    <input ng-disabled="true" style="outline:none;"/>
-                </md-input-container>
-                <md-button class="md-primary md-raised" ng-click="saveNewRow()" style="height:30px;">Save</md-button>
+                <md-table-container>
+                    <table md-table>
+                        <tbody md-body>
+                            <tr md-row>
+                                <td md-cell ng-repeat="columnName in isolateColumnMetadata">
+                                    <input ng-if="columnName.DataType === 'single' || columnName.DataType === 'text'"
+                                           ng-model="newRow[columnName.LabelText]"
+                                           placeholder="{{columnName.DisplayName}}" style="outline:none;"/>
+                                    <md-select ng-if="columnName.DataType === 'multiple'" ng-model="newRow[columnName.LabelText]"
+                                               aria-laebl="isolate select" placeholder="{{columnName.DisplayName}}">
+                                        <md-option ng-repeat="a in isolateDropDownObjects[columnName.LabelText]" ng-value="a.Value">
+                                            {{a.Value}}</md-option>
+                                    </md-select>
+                                </td>
+                                <td md-cell>
+                                    <input ng-disabled="true" placeholder="Test Id" style="outline:none;" />
+                                </td>
+                                <td md-cell>
+                                    <md-icon class="material-icons" ng-click="saveNewRow()"
+                                             style="outline:none;cursor:pointer;margin:0;width:50px;text-align:center;">
+                                        save</md-icon>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </md-table-container>
             </div>
         </div>
 
@@ -48,33 +53,25 @@
             <table md-table>
                 <thead md-head>
                     <tr md-row>
-                        <th md-column>Type</th>
-                        <th md-column>Location</th>
-                        <th md-column>Notation</th>
+                        <th md-column ng-repeat="column in isolateColumnMetadata">{{column.DisplayName}}</th>
                         <th md-column>Test Id</th>
                         <th>&nbsp;</th>
                     </tr>
                 </thead>
                 <tbody md-body>
-                    <tr md-row ng-if="isolates.length > 0" ng-repeat="isolate in isolates">
-                        <td md-cell>
-                            <!--ng-disabled="isolate.editable === 'false'"-->
-                            <md-select ng-model="isolate.bacteriaType"
-                                       aria-label="sample type" ng-change="changeInIsolateRow(isolate)">
-                                <md-option ng-repeat="ty in dropdowns.bacteriaType" ng-value="ty">{{ty}}</md-option>
+                    <tr md-row ng-repeat="isolate in isolates" ng-if="isolates.length > 0">
+                        <td md-cell ng-repeat="columnName in isolateColumnMetadata">
+                            <label ng-if="columnName.DataType === 'text'">{{isolate[columnName.LabelText]}}</label>
+                            <input ng-if="columnName.DataType === 'single'" ng-model="isolate[columnName.LabelText]"
+                                   ng-change="changeInIsolateRow(isolate)" style="outline:none;"/>
+                            <md-select ng-if="columnName.DataType === 'multiple'" ng-model="isolate[columnName.LabelText]"
+                                       aria-laebl="isolate unit select" ng-change="changeInIsolateRow(isolate)"
+                                       placeholder="Select value">
+                                <md-option ng-repeat="a in isolateDropDownObjects[columnName.LabelText]" ng-value="a.Value">
+                                    {{a.Value}}</md-option>
                             </md-select>
                         </td>
-                        <td md-cell>
-                            <!--ng-disabled="isolate.editable === 'false'"-->
-                            <md-select ng-model="isolate.isolateLocation"
-                                       aria-label="sample location" ng-change="changeInIsolateRow(isolate)">
-                                <md-option ng-repeat="loc in dropdowns.isolateLocation" ng-value="loc">{{loc}}</md-option>
-                            </md-select>
-                        </td>
-                        <td md-cell>
-                            <input ng-model="isolate.isolateNotation" ng-change="changeInIsolateRow(isolate)" style="outline:none;"/>
-                        </td>
-                        <td md-cell style="color:blue;cursor:pointer;outline:none;" ng-click="goToTestInfo(isolate.test_id)">
+                        <td md-cell style="color:blue;cursor:pointer;outline:none;" ng-click="goToTestInfo(isolate.TestId)">
                             {{isolate.TestId}}</td>
                         <td md-cell>
                             <div layout="row" style="width:100px;text-align:right;">
@@ -88,7 +85,7 @@
                         </td>
                     </tr>
                     <tr md-row ng-if="isolates.length <= 0">
-                        <td colspan="5" style="padding-left: 24px;">No Isolates Found</td>
+                        <td colspan="countForColspan" style="padding-left: 24px;">No Isolates Found</td>
                     </tr>
                 </tbody>
             </table>

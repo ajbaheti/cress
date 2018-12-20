@@ -8,7 +8,9 @@ angular.module('CressApp')
             getVisitTypes: getVisitTypes,
             getDefaultVisitColumns: getDefaultVisitColumns,
             getVisitTypeGroupings: getVisitTypeGroupings,
-            getGroupingDropDownValues: getGroupingDropDownValues
+            getGroupingDropDownValues: getGroupingDropDownValues,
+            getSamplesForVisit: getSamplesForVisit,
+            getSampleMetadata: getSampleMetadata
         };
 
         return service;
@@ -16,9 +18,7 @@ angular.module('CressApp')
         function getListOfVisits(patientId) {
             var deferred = $q.defer();
             $http
-                // .get('http://googleglass.cias.rit.edu/cress-backend/getVisitsForPatient.php?id='+patientId)
-                // .get('http://localhost/cress-backend/getVisitsForPatient.php?id='+patientId)
-                .get('http://localhost/cress-backend-new/getVisitsForPatient.php?id='+patientId)
+                .get('http://localhost/cress-backend-new/Visit/getVisitsForPatient.php?id='+patientId)
                 .then(function(response){
                     deferred.resolve(response.data);
                 })
@@ -97,5 +97,37 @@ angular.module('CressApp')
                 });
 
             return deferred.promise
+        }
+
+        function getSamplesForVisit(visitId) {
+            var deferred = $q.defer();
+            $http
+                .get('http://localhost/cress-backend-new/Visit/getSamplesForVisit.php?id=' + visitId)
+                .then(function (response) {
+                    deferred.resolve(response.data);
+                })
+                .catch(function (err) {
+                    console.log("Error in visit-service - getSamplesForVisit");
+                    console.log(err);
+                    deferred.reject("Error in visit-service - getSamplesForVisit");
+                });
+
+            return deferred.promise;
+        }
+
+        function getSampleMetadata() {
+            var deferred = $q.defer();
+            $http
+                .get('http://localhost/cress-backend-new/Visit/getSamplesMetadata.php')
+                .then(function (response) {
+                    deferred.resolve(response.data);
+                })
+                .catch(function (err) {
+                    console.log("Error in visit-service - getSamplesMetadata");
+                    console.log(err);
+                    deferred.reject("Error in visit-service - getSamplesMetadata");
+                });
+
+            return deferred.promise;
         }
     });

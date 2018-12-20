@@ -6,7 +6,8 @@ angular.module('CressApp')
         var service = {
             sampleId: null,
             isolates: null,
-            getVisitSamples: getVisitSamples,
+            columnMetadata: null,
+            isolateDropDownObjects: null,
             findSampleById: findSampleById,
             getIsolateDropdownValues: getIsolateDropdownValues,
             getIsolateMetadataColumns: getIsolateMetadataColumns,
@@ -15,23 +16,6 @@ angular.module('CressApp')
         };
 
         return service;
-
-        function getVisitSamples(visitId) {
-            var deferred = $q.defer();
-            $http
-                // .get('http://localhost/cress-backend/getSamples.php?id=' + visitId)
-                .get('http://googleglass.cias.rit.edu/cress-backend/getSamples.php?id=' + visitId)
-                .then(function (response) {
-                    deferred.resolve(response.data);
-                })
-                .catch(function (err) {
-                    console.log("Error in isolate-service - getVisitSamples");
-                    console.log(err);
-                    deferred.reject("Error in isolate-service - getVisitSamples");
-                });
-
-            return deferred.promise;
-        }
 
         function findSampleById(sampleId) {
             var deferred = $q.defer();

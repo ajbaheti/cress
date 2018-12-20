@@ -13,11 +13,35 @@ angular.module('CressApp')
         $scope.showAddButton = true;
 
         $scope.sampleId = IsolateService.sampleId;
-        $scope.dropdowns = IsolateService.dropDownValues;
+        $scope.isolateColumnMetadata = IsolateService.columnMetadata;
+        $scope.isolateDropDownObjects = IsolateService.isolateDropDownObjects;
         $scope.isolates = IsolateService.isolates;
-        console.log($scope.isolates);
-        console.log($scope.dropdowns);
+
+        $scope.countForColspan = $scope.isolateColumnMetadata.length + 2;
+
         $scope.originalIsolates = angular.copy($scope.isolates, $scope.originalIsolates);
+
+        TestsService
+            .getTestDropdownValues()
+            .then(function(data){
+                if(data !== 'No data found'){
+                    var testLabelIds = data.map(function(obj){
+                        return {lbl_text: obj.LabelText};
+                    });
+                    var uniqueLabels = removeDuplicates(testLabelIds, "lbl_text");
+
+                    //for each label (drop down), create separate array with values
+                    uniqueLabels.forEach(function(lbl){
+                        $scope.testDropDownObjects[''+lbl.lbl_text] = data.filter(function(obj){
+                            return obj.LabelText === lbl.lbl_text;
+                        });
+                    });
+                    TestsService.testDropDownObjects = $scope.testDropDownObjects;
+                }
+            })
+            .catch(function(err){
+
+            });
 
         $scope.changeInIsolateRow = function(isolate){
             var temp = $scope.originalIsolates.filter(function(islt){
@@ -36,43 +60,71 @@ angular.module('CressApp')
         $scope.goToTestInfo = function(testId) {
             if(testId){
                 TestsService
-                    .getTestsById(testId)
+                    .getTestsBySampleOrIsolateId(testId, 'ISOLATE')
                     .then(function(data){
-                        if(data !== 'No tests found'){
-                            TestsService.selectedTestInfo = data;
-                            $location.path('/test-info');
+                        if(data !== 'No data found'){
+                            var temp = [];
+                            data.forEach(function(test){
+                                var foundTestId = temp.find(function(t){
+                                    return test.TestId === t.TestId;
+                                });
+                                //if test id not found, add it to the array
+                                if(!foundTestId){
+                                    temp.push({TestId:test.TestId});
+                                }
+                            });
+
+                            TestsService
+                                .getTestMetadata()
+                                .then(function(cols){
+                                    TestsService.columnMetadata = cols;
+                                    // create test object for display
+                                    $scope.tests = temp;
+                                    for(var i=0; i<temp.length; i++){
+                                        cols.forEach(function(colName){
+                                            $scope.tests[i][''+colName.LabelText] = null;
+                                        });
+                                    }
+                                    // fill in the values in tests array
+                                    $scope.tests.forEach(function(id){
+                                        data.forEach(function(vis){
+                                            if(vis.TestId === id.TestId){
+                                                id[''+vis.LabelText] = vis.Result;
+                                            }
+                                        });
+                                    });
+
+                                    TestsService.tests = $scope.tests;
+                                    $location.path('/test-info');
+                                })
+                                .catch(function(err){
+                                    console.log(err);
+                                    showMsg("Something went wrong, please try again later.");
+                                });
                         } else {
-                            $location.path('/tests');
+                            console.log(data);
+                            showMsg("No data found");
                         }
                     })
                     .catch(function(err){
                         console.log("error getting test information by id");
+                        showMsg("Something went wrong, please try again later.");
                     });
             }
         };
 
         $scope.saveIsolate = function(sampleObj) {
             var dataToSave = [];
-            dataToSave.push({
-                IsolateId: sampleObj.IsolateId,
-                ItemId: 0,
-                Result: sampleObj.bacteriaType,
-                Notation: null
-            });
-            dataToSave.push({
-                IsolateId: sampleObj.IsolateId,
-                ItemId: 1,
-                Result: sampleObj.isolateLocation,
-                Notation: null
-            });
-            dataToSave.push({
-                IsolateId: sampleObj.IsolateId,
-                ItemId: 2,
-                Result: sampleObj.isolateNotation,
-                Notation: null
+
+            $scope.isolateColumnMetadata.forEach(function(metadata){
+                dataToSave.push({
+                    IsolateId: sampleObj.IsolateId,
+                    ItemId: metadata.ItemId,
+                    Result: sampleObj[''+metadata.LabelText],
+                    Notation: null
+                });
             });
 
-            console.log(dataToSave);
             IsolateService
                 .updateSingleIsolate(dataToSave)
                 .then(function(data){
@@ -93,11 +145,9 @@ angular.module('CressApp')
         };
 
         $scope.deleteIsolate = function(sampleObj) {
-            console.log(sampleObj);
             IsolateService
                 .deleteSingleIsolate($scope.sampleId, sampleObj.IsolateId)
                 .then(function(data){
-                    console.log(data);
                     if(data === 'Data deleted successfully'){
                         $scope.isolates = $scope.isolates.filter(function(iso){
                             return iso.TestId !== sampleObj.TestId;
@@ -118,16 +168,19 @@ angular.module('CressApp')
         };
 
         $scope.saveNewRow = function() {
-            console.log($scope.newRow);
-
             if($scope.newRow){
                 var dataToSave = [];
-                if($scope.newRow.bacteriaType){
+                $scope.isolateColumnMetadata.forEach(function(metadata){
                     dataToSave.push({
+                        IsolateId: 0, //$scope.newRow.IsolateId, //Unknown
+                        ItemId: metadata.ItemId,
+                        Result: $scope.newRow[''+metadata.LabelText] ? $scope.newRow[''+metadata.LabelText] : null,
+                        Notation: null
                     });
-                }
+                });
                 $scope.showAddButton = false;
                 $scope.showAddIsolate = false;
+                console.log(dataToSave);
             }
         };
 

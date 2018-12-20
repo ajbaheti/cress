@@ -16,13 +16,8 @@
                 <md-input-container flex="50" style="margin:8px;">
                     <label>Sample Id</label>
                     <input ng-model="sampleId" required />
-                    <!--<md-select ng-model="selectedPatient" ng-change="onPatientSelect(selectedPatient)">
-                        <md-option ng-repeat="patient in patients" ng-value="{{patient}}">
-                            {{patient.patient_id}}
-                        </md-option>
-                    </md-select>-->
                 </md-input-container>
-                <md-button class="md-primary md-raised" style="height:36px;" ng-click="findSample()">Search</md-button>
+                <md-button class="md-primary md-raised" style="height:36px;" ng-click="findIsolateBySample()">Search</md-button>
             </div>
         </div>
     </md-content>

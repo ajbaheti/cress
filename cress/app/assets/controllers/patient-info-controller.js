@@ -31,8 +31,6 @@ angular.module('CressApp')
             $scope.patientInfoObj[''+lbl.LabelText] = null;
         });
 
-        // console.log($scope.patientInfoObj);
-        // console.log($scope.rightLabelList);
         /*// default visit columns to display
         VisitService
             .getDefaultVisitColumns()
@@ -53,17 +51,14 @@ angular.module('CressApp')
         PatientService
             .getSinglePatientInfo(PatientService.selectedPatientId)
             .then(function(patient){
-                // console.log(patient);
                 if(patient.length > 0){
                     // TODO: loop through left and right label list and find multi-select values
                     // then assign model values in array
                     patient.forEach(function(row){
                         $scope.patientInfoObj[''+row.Labeltext] = row.Result;
                     });
-                    // $scope.patientInfoObj = patient[0];
-                    console.log($scope.patientInfoObj);
                 } else {
-                    console.log("Patient information not found");
+                    showMsg("Patient information not found");
                 }
             })
             .catch(function(err){
@@ -116,14 +111,6 @@ angular.module('CressApp')
                 console.log(err);
             });
 
-        function inDefaultColumns(label) {
-            var x = $scope.visitDefaultColumns.find(function(name){
-                return name === label;
-            });
-
-            return !!x;
-        }
-
         $scope.savePatient = function() {
             var allRequiredEntered = true;
             var dataToSave = [];
@@ -150,8 +137,6 @@ angular.module('CressApp')
                 }
             });
             if(allRequiredEntered){
-                // console.log("saving the patient");
-                // console.log(dataToSave);
                 PatientService
                     .savePatient(dataToSave)
                     .then(function(data){
@@ -178,7 +163,7 @@ angular.module('CressApp')
 
         $scope.goToVisit = function(visit, ev) {
             $mdDialog.show({
-                locals:{visitObject: visit},
+                locals:{visitId: visit.visitId},
                 templateUrl: 'app/partials/visit.html',
                 controller: 'VisitCtrl',
                 parent: angular.element(document.body),
@@ -199,5 +184,13 @@ angular.module('CressApp')
                     .position('bottom right' )
                     .hideDelay(3000)
             );
+        }
+
+        function inDefaultColumns(label) {
+            var x = $scope.visitDefaultColumns.find(function(name){
+                return name === label;
+            });
+
+            return !!x;
         }
     });

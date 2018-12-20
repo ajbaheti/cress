@@ -53,7 +53,6 @@ angular.module('CressApp')
                             TestsService
                                 .getTestMetadata()
                                 .then(function(cols){
-                                    console.log(cols);
                                     TestsService.columnMetadata = cols;
                                     // create test object for display
                                     $scope.tests = temp;

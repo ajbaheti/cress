@@ -1,7 +1,8 @@
 'use strict';
 
 angular.module('CressApp')
-	.controller('PatientsCtrl', function ($scope, $location, $mdMenu, $mdDialog, AuthService, PatientService, StudyService, RedirectPath) {
+	.controller('PatientsCtrl', function ($scope, $location, $mdMenu, $mdDialog,
+              AuthService, PatientService, StudyService, IsolateService, TestsService, RedirectPath) {
 
 	    if(RedirectPath !== '/patients'){
             $location.path(RedirectPath);
@@ -21,7 +22,6 @@ angular.module('CressApp')
 
     	$scope.editPatient = true;
         $scope.dropDownObjects = {};
-        // $scope.selectedPatient = null;
 
         // get the list of labels to be displayed for patient
         PatientService
@@ -59,7 +59,6 @@ angular.module('CressApp')
             });
 
         $scope.onPatientSelect = function(patient) {
-            // $scope.selectedPatient = patient;
             PatientService.selectedPatientId = patient.subjectId;
             $location.path('/patient-info');
             return patient;
@@ -71,9 +70,28 @@ angular.module('CressApp')
                     return mapObj[prop];
                 }).indexOf(obj[prop]) === pos;
             });
-        } 
+        }
 
-        //TODO Admin page drop down edits
-        //TODO Sort drop down values by sort_order
-        //TODO is_required fields on top..basically sort
+        IsolateService
+            .getIsolateDropdownValues()
+            .then(function(data){
+                if(data !== 'No data found'){
+                    var testLabelIds = data.map(function(obj){
+                        return {lbl_text: obj.LabelText};
+                    });
+                    var uniqueLabels = removeDuplicates(testLabelIds, "lbl_text");
+
+                    var isolateDropDownObjects = {};
+                    //for each label (drop down), create separate array with values
+                    uniqueLabels.forEach(function(lbl){
+                        isolateDropDownObjects[''+lbl.lbl_text] = data.filter(function(obj){
+                            return obj.LabelText === lbl.lbl_text;
+                        });
+                    });
+                    IsolateService.isolateDropDownObjects = isolateDropDownObjects;
+                }
+            })
+            .catch(function(err){
+
+            });
 });

@@ -8,10 +8,31 @@ angular.module('CressApp')
         }
 
         $scope.sampleId = null;
-        $scope.Isolates = [];
-        $scope.dropdowns = [];
 
-        $scope.findSample = function() {
+        IsolateService
+            .getIsolateDropdownValues()
+            .then(function(data){
+                if(data !== 'No data found'){
+                    var testLabelIds = data.map(function(obj){
+                        return {lbl_text: obj.LabelText};
+                    });
+                    var uniqueLabels = removeDuplicates(testLabelIds, "lbl_text");
+
+                    var isolateDropDownObjects = {};
+                    //for each label (drop down), create separate array with values
+                    uniqueLabels.forEach(function(lbl){
+                        isolateDropDownObjects[''+lbl.lbl_text] = data.filter(function(obj){
+                            return obj.LabelText === lbl.lbl_text;
+                        });
+                    });
+                    IsolateService.isolateDropDownObjects = isolateDropDownObjects;
+                }
+            })
+            .catch(function(err){
+
+            });
+
+        $scope.findIsolateBySample = function() {
             if($scope.sampleId){
                 IsolateService
                     .findSampleById($scope.sampleId)
@@ -22,7 +43,6 @@ angular.module('CressApp')
                         }
                         else {
                             IsolateService.sampleId = $scope.sampleId;
-                            console.log(isolatesFound);
                             var temp = [];
                             isolatesFound.forEach(function(isolate){
                                 var foundIsolateId = temp.find(function(iso){
@@ -37,17 +57,17 @@ angular.module('CressApp')
                             IsolateService
                                 .getIsolateMetadataColumns()
                                 .then(function(cols){
-                                    console.log(cols);
+                                    IsolateService.columnMetadata = cols;
                                     // create isolates object for display
-                                    $scope.Isolates = temp;
+                                    var isolateData = temp;
                                     for(var i=0; i<temp.length; i++){
                                         cols.forEach(function(colName){
-                                            $scope.Isolates[i][''+colName.LabelText] = null;
+                                            isolateData[i][''+colName.LabelText] = null;
                                         });
                                     }
 
                                     // fill in the values in isolates array
-                                    $scope.Isolates.forEach(function(id){
+                                    isolateData.forEach(function(id){
                                         isolatesFound.forEach(function(vis){
                                             if(vis.IsolateId === id.IsolateId){
                                                 id[''+vis.LabelText] = vis.Result;
@@ -56,8 +76,8 @@ angular.module('CressApp')
                                         });
                                     });
 
-                                    // console.log($scope.Isolates);
-                                    IsolateService.isolates = $scope.Isolates;
+                                    // console.log(isolateData);
+                                    IsolateService.isolates = isolateData;
                                     $location.path('/isolate-info');
                                 })
                                 .catch(function(err){
@@ -71,36 +91,6 @@ angular.module('CressApp')
             }
         };
 
-        //NOTE - THIS CAN BE PART OF isolate-info controller
-        IsolateService
-            .getIsolateDropdownValues()
-            .then(function(data){
-                var temp = [];
-                data.forEach(function(row){
-                    var foundLabel = temp.find(function(iso){
-                        return row.LabelText === iso.LabelText;
-                    });
-                    //if visit id not found, add it to the array
-                    if(!foundLabel){
-                        temp.push({LabelText: row.LabelText});
-                        $scope.dropdowns[''+row.LabelText] = [];
-                    }
-                });
-
-                temp.forEach(function(label){
-                    data.forEach(function(row){
-                        if(label.LabelText === row.LabelText){
-                            $scope.dropdowns[''+row.LabelText].push(row.Value);
-                        }
-                    });
-                });
-
-                IsolateService.dropDownValues = $scope.dropdowns;
-            })
-            .catch(function(err){
-                console.log(err);
-            });
-
         $scope.goToIsolate = function(sample) {
             IsolateService.selectedIsolate = sample;
             $location.path('/isolate-info');
@@ -113,5 +103,13 @@ angular.module('CressApp')
                     .position('bottom right')
                     .hideDelay(3000)
             );
+        }
+
+        function removeDuplicates(myArr, prop) {
+            return myArr.filter(function(obj, pos, arr){
+                return arr.map(function(mapObj){
+                    return mapObj[prop];
+                }).indexOf(obj[prop]) === pos;
+            });
         }
 });

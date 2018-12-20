@@ -2,16 +2,15 @@
 
 angular.module('CressApp')
     .controller('VisitCtrl', function ($scope, $location, $mdMenu, $mdDialog,
-            AuthService, PatientService, visitObject, IsolateService, VisitService) {
+            AuthService, PatientService, visitId, IsolateService, VisitService) {
 
+        $scope.visitId = visitId;
         $scope.patientId = PatientService.selectedPatientId;
-        $scope.visit = visitObject;
-        $scope.visit.selectedVisitType = null;
         $scope.inputVal = null;
         $scope.groupingDropdownObjects = {};
 
         // get all visits types for drop down
-        VisitService
+        /*VisitService
             .getVisitTypes()
             .then(function(visitTypes){
                 $scope.listOfVisitTypes = visitTypes;
@@ -19,28 +18,59 @@ angular.module('CressApp')
             .catch(function(err){
                 console.log("error fetching visit types");
                 console.log(err);
-            });
+            });*/
 
         // get all the samples for visit
-        IsolateService
-            .getVisitSamples($scope.visit.visit_id)
-            .then(function(samples){
-                // console.log(samples);
-                if(samples === "No samples found"){
-                    $scope.samples = [];
-                } else {
-                    samples.forEach(function(sampl){
-                        sampl.isChecked = true;
+        VisitService
+            .getSamplesForVisit($scope.visitId)
+            .then(function(data){
+                if(data !== 'No data found') {
+                    var temp = [];
+                    console.log(data);
+                    data.forEach(function (sample) {
+                        var foundSampleId = temp.find(function (t) {
+                            return sample.SampleId === t.SampleId;
+                        });
+
+                        if (!foundSampleId) {
+                            temp.push({SampleId: sample.SampleId});
+                        }
                     });
-                    $scope.samples = samples;
+
+                    VisitService
+                        .getSampleMetadata()
+                        .then(function (cols) {
+                            $scope.samples = temp;
+                            for (var i = 0; i < temp.length; i++) {
+                                cols.forEach(function (colName) {
+                                    $scope.samples[i]['' + colName.LabelText] = null;
+                                });
+                            }
+                            // fill in the values in tests array
+                            $scope.samples.forEach(function (id) {
+                                data.forEach(function (vis) {
+                                    if (vis.SampleId === id.SampleId) {
+                                        id['' + vis.LabelText] = vis.Result;
+                                    }
+                                });
+                            });
+
+                            // TestsService.tests = $scope.tests;
+                            console.log($scope.samples);
+                        })
+                        .catch(function (err) {
+                            console.log(err);
+                        });
+                }
+                else {
+
                 }
             })
             .catch(function(err){
-                console.log("error fetching samples");
                 console.log(err);
             });
 
-        VisitService
+        /*VisitService
             .getGroupingDropDownValues()
             .then(function(result){
                 if(result){
@@ -61,16 +91,70 @@ angular.module('CressApp')
             })
             .catch(function(err){
                 console.log("Error fetching drop down values");
-            });
+            });*/
 
         $scope.cancel = function() {
             $mdDialog.cancel();
         };
 
-        $scope.goToSample = function(sample) {
-            IsolateService.selectedIsolate = sample;
-            $location.path('/isolate-info');
-            $mdDialog.cancel();
+        $scope.goToIsolate = function(sample) {
+            if(sample){
+                IsolateService
+                    .findSampleById(sample.SampleId)
+                    .then(function(isolatesFound){
+                        if(isolatesFound === 'No match found'){
+                            console.log("No data found");
+                            // showMsg("No data found");
+                        }
+                        else {
+                            IsolateService.sampleId = sample.SampleId;
+                            var temp = [];
+                            isolatesFound.forEach(function(isolate){
+                                var foundIsolateId = temp.find(function(iso){
+                                    return isolate.IsolateId === iso.IsolateId;
+                                });
+                                //if visit id not found, add it to the array
+                                if(!foundIsolateId){
+                                    temp.push({IsolateId:isolate.IsolateId, TestId: null});
+                                }
+                            });
+
+                            IsolateService
+                                .getIsolateMetadataColumns()
+                                .then(function(cols){
+                                    IsolateService.columnMetadata = cols;
+                                    // create isolates object for display
+                                    var isolateData = temp;
+                                    for(var i=0; i<temp.length; i++){
+                                        cols.forEach(function(colName){
+                                            isolateData[i][''+colName.LabelText] = null;
+                                        });
+                                    }
+
+                                    // fill in the values in isolates array
+                                    isolateData.forEach(function(id){
+                                        isolatesFound.forEach(function(vis){
+                                            if(vis.IsolateId === id.IsolateId){
+                                                id[''+vis.LabelText] = vis.Result;
+                                                id['TestId'] = vis.TestId;
+                                            }
+                                        });
+                                    });
+
+                                    // console.log(isolateData);
+                                    IsolateService.isolates = isolateData;
+                                    $location.path('/isolate-info');
+                                    $mdDialog.cancel();
+                                })
+                                .catch(function(err){
+                                    console.log(err);
+                                });
+                        }
+                    })
+                    .catch(function(err){
+                        console.log("Error getting sample by id");
+                    });
+            }
         };
 
         $scope.saveSamples = function() {
