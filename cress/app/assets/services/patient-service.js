@@ -12,7 +12,9 @@ angular.module('CressApp')
             getPatientLabels: getPatientLabels,
             getSinglePatientInfo: getSinglePatientInfo,
             getPatientDropdownValues: getPatientDropdownValues,
-            savePatient: savePatient
+            savePatient: savePatient,
+            deletePatientDropdownValue: deletePatientDropdownValue,
+            addPatientDropdownValue: addPatientDropdownValue
         };
 
         return service;
@@ -92,6 +94,38 @@ angular.module('CressApp')
                     console.log("Error in patient-service - savePatient");
                     console.log(err);
                     deferred.reject("Error in patient-service - savePatient");
+                });
+
+            return deferred.promise;
+        }
+
+        function deletePatientDropdownValue(itemId, valueId) {
+            var deferred = $q.defer();
+            $http
+                .get('http://localhost/cress-backend-new/Subject/deletePatientDropdownValue.php?item_id='+itemId+'&value_id='+valueId)
+                .then(function(response){
+                    deferred.resolve(response.data);
+                })
+                .catch(function(err){
+                    console.log("Error in patient-service - deletePatientDropdownValue");
+                    console.log(err);
+                    deferred.reject("Error in patient-service - deletePatientDropdownValue");
+                });
+
+            return deferred.promise;
+        }
+
+        function addPatientDropdownValue(newRowObject) {
+            var deferred = $q.defer();
+            $http
+                .post('http://localhost/cress-backend-new/Subject/addPatientDropdownValue.php', {newRowObject})
+                .then(function(response){
+                    deferred.resolve(response.data);
+                })
+                .catch(function(err){
+                    console.log("Error in patient-service - addPatientDropdownValue");
+                    console.log(err);
+                    deferred.reject("Error in patient-service - addPatientDropdownValue");
                 });
 
             return deferred.promise;

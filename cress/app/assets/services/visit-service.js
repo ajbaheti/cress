@@ -4,13 +4,17 @@ angular.module('CressApp')
     .factory('VisitService', function($http, $q){
 
         var service = {
+            visitDropDownObjects: null,
             getListOfVisits: getListOfVisits,
+            getVisitDropdownValues: getVisitDropdownValues,
             getVisitTypes: getVisitTypes,
             getDefaultVisitColumns: getDefaultVisitColumns,
             getVisitTypeGroupings: getVisitTypeGroupings,
             getGroupingDropDownValues: getGroupingDropDownValues,
             getSamplesForVisit: getSamplesForVisit,
-            getSampleMetadata: getSampleMetadata
+            getSampleMetadata: getSampleMetadata,
+            addVisitDropdownValue: addVisitDropdownValue,
+            deleteVisitDropdownValue: deleteVisitDropdownValue
         };
 
         return service;
@@ -29,6 +33,22 @@ angular.module('CressApp')
                 });
 
             return deferred.promise
+        }
+
+        function getVisitDropdownValues() {
+            var deferred = $q.defer();
+            $http
+                .get('http://localhost/cress-backend-new/Visit/getVisitDropdownValues.php')
+                .then(function (response) {
+                    deferred.resolve(response.data);
+                })
+                .catch(function (err) {
+                    console.log("Error in visit-service - getVisitDropdownValues");
+                    console.log(err);
+                    deferred.reject("Error in visit-service - getVisitDropdownValues");
+                });
+
+            return deferred.promise;
         }
 
         function getVisitTypes() {
@@ -126,6 +146,38 @@ angular.module('CressApp')
                     console.log("Error in visit-service - getSamplesMetadata");
                     console.log(err);
                     deferred.reject("Error in visit-service - getSamplesMetadata");
+                });
+
+            return deferred.promise;
+        }
+
+        function deleteVisitDropdownValue(itemId, valueId) {
+            var deferred = $q.defer();
+            $http
+                .get('http://localhost/cress-backend-new/Visit/deleteVisitDropdownValue.php?item_id='+itemId+'&value_id='+valueId)
+                .then(function(response){
+                    deferred.resolve(response.data);
+                })
+                .catch(function(err){
+                    console.log("Error in visit-service - deleteVisitDropdownValue");
+                    console.log(err);
+                    deferred.reject("Error in visit-service - deleteVisitDropdownValue");
+                });
+
+            return deferred.promise;
+        }
+
+        function addVisitDropdownValue(newRowObject) {
+            var deferred = $q.defer();
+            $http
+                .post('http://localhost/cress-backend-new/Visit/addVisitDropdownValue.php', {newRowObject})
+                .then(function(response){
+                    deferred.resolve(response.data);
+                })
+                .catch(function(err){
+                    console.log("Error in visit-service - addVisitDropdownValue");
+                    console.log(err);
+                    deferred.reject("Error in visit-service - addVisitDropdownValue");
                 });
 
             return deferred.promise;

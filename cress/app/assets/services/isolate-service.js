@@ -12,7 +12,9 @@ angular.module('CressApp')
             getIsolateDropdownValues: getIsolateDropdownValues,
             getIsolateMetadataColumns: getIsolateMetadataColumns,
             deleteSingleIsolate: deleteSingleIsolate,
-            updateSingleIsolate: updateSingleIsolate
+            updateSingleIsolate: updateSingleIsolate,
+            deleteIsolateDropdownValue: deleteIsolateDropdownValue,
+            addIsolateDropdownValue: addIsolateDropdownValue
         };
 
         return service;
@@ -96,4 +98,37 @@ angular.module('CressApp')
 
             return deferred.promise;
         }
+
+        function deleteIsolateDropdownValue(itemId, valueId) {
+            var deferred = $q.defer();
+            $http
+                .get('http://localhost/cress-backend-new/Isolate/deleteIsolateDropdownValue.php?item_id='+itemId+'&value_id='+valueId)
+                .then(function(response){
+                    deferred.resolve(response.data);
+                })
+                .catch(function(err){
+                    console.log("Error in isolate-service - deleteIsolateDropdownValue");
+                    console.log(err);
+                    deferred.reject("Error in isolate-service - deleteIsolateDropdownValue");
+                });
+
+            return deferred.promise;
+        }
+
+        function addIsolateDropdownValue(newRowObject) {
+            var deferred = $q.defer();
+            $http
+                .post('http://localhost/cress-backend-new/Isolate/addIsolateDropdownValue.php', {newRowObject})
+                .then(function(response){
+                    deferred.resolve(response.data);
+                })
+                .catch(function(err){
+                    console.log("Error in isolate-service - addIsolateDropdownValue");
+                    console.log(err);
+                    deferred.reject("Error in isolate-service - addIsolateDropdownValue");
+                });
+
+            return deferred.promise;
+        }
+
     });

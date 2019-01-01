@@ -2,26 +2,233 @@
     <crd-toolbar current-nav-item="admin" show-tabs="true"></crd-toolbar>
 
     <md-content md-whiteframe="2dp" style="margin:16px;padding:8px;">
-        <md-tabs md-dynamic-height md-border-bottom>
+        <md-tabs md-dynamic-height md-border-bottom md-selected="selectedTab">
 
-            <md-tab label="Patients (General)">
-                <md-content class="md-padding" ng-repeat="key in keys">
-                    <h3 class="admin-tabs-heading">{{key[0]}}</h3>
-                    <md-chips ng-model="key[1]">
-                        <md-chip-template>
-                            <span>{{$chip.value}}</span>
-                        </md-chip-template>
-                    </md-chips>
+            <md-tab label="Subjects" md-on-select="onSubjectTabSelection()">
+                <md-content class="md-padding" ng-repeat="key in subjectKeys">
+                    <h3 class="admin-tabs-heading">{{key[1][0].DisplayName}}</h3>
+                    <form layout="row">
+                        <md-input-container>
+                            <label>Value Id</label>
+                            <input ng-model="subjectNewRow[''+key[1][0].LabelText].ValueId" />
+                        </md-input-container>
+                        <md-input-container>
+                            <label>Value</label>
+                            <input ng-model="subjectNewRow[''+key[1][0].LabelText].Value" />
+                        </md-input-container>
+                        <md-input-container>
+                            <label>Sort Order</label>
+                            <input ng-model="subjectNewRow[''+key[1][0].LabelText].SortOrder" />
+                        </md-input-container>
+                        <md-button class="md-primary md-raised" style="height:40px;"
+                                   ng-click="addPatientRow(key[1][0].ItemId, key[1][0].LabelText)">ADD</md-button>
+                    </form>
+                    <md-table-container>
+                        <table md-table>
+                            <thead md-head>
+                                <tr md-row>
+                                    <th md-column>Value Id</th>
+                                    <th md-column>Value</th>
+                                    <th md-column>Sort Order</th>
+                                    <th md-column>&nbsp;</th>
+                                </tr>
+                            </thead>
+                            <tbody md-body>
+                                <tr md-row ng-repeat="patientGeneralData in key[1] track by $index">
+                                    <td md-cell>{{patientGeneralData.ValueId}}</td>
+                                    <td md-cell>{{patientGeneralData.Value}}</td>
+                                    <td md-cell>{{patientGeneralData.SortOrder}}</td>
+                                    <td md-cell>
+                                        <md-icon class="material-icons" style="outline:none;cursor:pointer;margin:0;text-align:center;"
+                                             ng-click="deletePatientGeneralValue(patientGeneralData)">delete</md-icon>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </md-table-container>
                 </md-content>
             </md-tab>
 
-            <md-tab label="Users">
+            <md-tab label="Isolates" md-on-select="onIsolateTabSelection()">
+                <md-content class="md-padding" ng-repeat="key in isolateKeys">
+                    <h3 class="admin-tabs-heading">{{key[1][0].DisplayName}}</h3>
+                    <form layout="row">
+                        <md-input-container>
+                            <label>Value Id</label>
+                            <input ng-model="isolateNewRow[''+key[1][0].LabelText].ValueId" />
+                        </md-input-container>
+                        <md-input-container>
+                            <label>Value</label>
+                            <input ng-model="isolateNewRow[''+key[1][0].LabelText].Value" />
+                        </md-input-container>
+                        <md-input-container>
+                            <label>Sort Order</label>
+                            <input ng-model="isolateNewRow[''+key[1][0].LabelText].SortOrder" />
+                        </md-input-container>
+                        <md-button class="md-primary md-raised" style="height:40px;"
+                                   ng-click="addIsolateRow(key[1][0].ItemId, key[1][0].LabelText)">ADD</md-button>
+                    </form>
+                    <md-table-container>
+                        <table md-table>
+                            <thead md-head>
+                            <tr md-row>
+                                <th md-column>Value Id</th>
+                                <th md-column>Value</th>
+                                <th md-column>Sort Order</th>
+                                <th md-column>&nbsp;</th>
+                            </tr>
+                            </thead>
+                            <tbody md-body>
+                            <tr md-row ng-repeat="isolateData in key[1] track by $index">
+                                <td md-cell>{{isolateData.ValueId}}</td>
+                                <td md-cell>{{isolateData.Value}}</td>
+                                <td md-cell>{{isolateData.SortOrder}}</td>
+                                <td md-cell>
+                                    <md-icon class="material-icons" style="outline:none;cursor:pointer;margin:0;text-align:center;"
+                                             ng-click="deleteIsolateValue(isolateData)">delete</md-icon>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </md-table-container>
+                </md-content>
+            </md-tab>
+
+            <md-tab label="Tests" md-on-select="onTestTabSelection()">
+                <md-content class="md-padding" ng-repeat="key in testKeys">
+                    <h3 class="admin-tabs-heading">{{key[1][0].DisplayName}}</h3>
+                    <form layout="row">
+                        <md-input-container>
+                            <label>Value Id</label>
+                            <input ng-model="testNewRow[''+key[1][0].LabelText].ValueId" />
+                        </md-input-container>
+                        <md-input-container>
+                            <label>Value</label>
+                            <input ng-model="testNewRow[''+key[1][0].LabelText].Value" />
+                        </md-input-container>
+                        <md-input-container>
+                            <label>Sort Order</label>
+                            <input ng-model="testNewRow[''+key[1][0].LabelText].SortOrder" />
+                        </md-input-container>
+                        <md-button class="md-primary md-raised" style="height:40px;"
+                                   ng-click="addTestRow(key[1][0].ItemId, key[1][0].LabelText)">ADD</md-button>
+                    </form>
+                    <md-table-container>
+                        <table md-table>
+                            <thead md-head>
+                            <tr md-row>
+                                <th md-column>Value Id</th>
+                                <th md-column>Value</th>
+                                <th md-column>Sort Order</th>
+                                <th md-column>&nbsp;</th>
+                            </tr>
+                            </thead>
+                            <tbody md-body>
+                            <tr md-row ng-repeat="testData in key[1] track by $index">
+                                <td md-cell>{{testData.ValueId}}</td>
+                                <td md-cell>{{testData.Value}}</td>
+                                <td md-cell>{{testData.SortOrder}}</td>
+                                <td md-cell>
+                                    <md-icon class="material-icons" style="outline:none;cursor:pointer;margin:0;text-align:center;"
+                                             ng-click="deleteTestValue(testData)">delete</md-icon>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </md-table-container>
+                </md-content>
+            </md-tab>
+
+            <md-tab label="Visits" md-on-select="onVisitTabSelection()">
+                <md-content class="md-padding" ng-repeat="key in visitKeys">
+                    <h3 class="admin-tabs-heading">{{key[1][0].DisplayName}}</h3>
+                    <form layout="row">
+                        <md-input-container>
+                            <label>Value Id</label>
+                            <input ng-model="visitNewRow[''+key[1][0].LabelText].ValueId" />
+                        </md-input-container>
+                        <md-input-container>
+                            <label>Value</label>
+                            <input ng-model="visitNewRow[''+key[1][0].LabelText].Value" />
+                        </md-input-container>
+                        <md-input-container>
+                            <label>Sort Order</label>
+                            <input ng-model="visitNewRow[''+key[1][0].LabelText].SortOrder" />
+                        </md-input-container>
+                        <md-button class="md-primary md-raised" style="height:40px;"
+                                   ng-click="addVisitRow(key[1][0].ItemId, key[1][0].LabelText)">ADD</md-button>
+                    </form>
+                    <md-table-container>
+                        <table md-table>
+                            <thead md-head>
+                            <tr md-row>
+                                <th md-column>Value Id</th>
+                                <th md-column>Value</th>
+                                <th md-column>Sort Order</th>
+                                <th md-column>&nbsp;</th>
+                            </tr>
+                            </thead>
+                            <tbody md-body>
+                            <tr md-row ng-repeat="visitData in key[1] track by $index">
+                                <td md-cell>{{visitData.ValueId}}</td>
+                                <td md-cell>{{visitData.Value}}</td>
+                                <td md-cell>{{visitData.SortOrder}}</td>
+                                <td md-cell>
+                                    <md-icon class="material-icons" style="outline:none;cursor:pointer;margin:0;text-align:center;"
+                                             ng-click="deleteVisitValue(visitData)">delete</md-icon>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </md-table-container>
+                </md-content>
+            </md-tab>
+
+            <md-tab label="Users" md-on-select="onUserTabSelection()">
                 <md-content class="md-padding">
-                    <h3 class="md-display-2">Users</h3>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla venenatis ante augue. Phasellus volutpat neque ac dui mattis vulputate. Etiam consequat aliquam cursus. In sodales pretium ultrices. Maecenas lectus est, sollicitudin consectetur felis nec, feugiat ultricies mi.</p>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla venenatis ante augue. Phasellus volutpat neque ac dui mattis vulputate. Etiam consequat aliquam cursus. In sodales pretium ultrices. Maecenas lectus est, sollicitudin consectetur felis nec, feugiat ultricies mi.</p>
+                    <h3 class="admin-tabs-heading">Existing Users</h3>
+                    <div layout="column">
+                        <form layout="row">
+                            <md-input-container>
+                                <label>Email</label>
+                                <input ng-model="userNewRow.user_name" />
+                            </md-input-container>
+                            <md-input-container>
+                                <label>Is Admin?</label>
+                                <md-select ng-model="userNewRow.is_admin">
+                                    <md-option ng-value="1">True</md-option>
+                                    <md-option ng-value="0">False</md-option>
+                                </md-select>
+                            </md-input-container>
+                            <md-button class="md-primary md-raised" style="height:32px;margin-left:24px;margin-top:12px;"
+                                       ng-click="addNewUser()">ADD</md-button>
+                        </form>
+                        <div style="margin-bottom:8px;font-style:italic;color:darkgrey;">NOTE: Password will be fr1end, the new user needs to log in and change it!</div>
+                    </div>
+                    <md-table-container>
+                        <table md-table>
+                            <thead md-head>
+                                <tr md-row>
+                                    <th md-column>Email</th>
+                                    <th md-column>IsAdmin</th>
+                                    <!--<th md-column>&nbsp;</th>-->
+                                </tr>
+                            </thead>
+                            <tbody md-body>
+                                <tr md-row ng-repeat="user in users track by $index">
+                                    <td md-cell>{{user.user_name}}</td>
+                                    <td md-cell>{{user.is_admin}}</td>
+                                    <!--<td md-cell>
+                                        <md-icon class="material-icons" style="outline:none;cursor:pointer;margin:0;text-align:center;"
+                                                 ng-click="deleteUser(user, $index)">delete</md-icon>
+                                    </td>-->
+                                </tr>
+                            </tbody>
+                        </table>
+                    </md-table-container>
                 </md-content>
             </md-tab>
+
         </md-tabs>
     </md-content>
 

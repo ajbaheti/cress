@@ -95,6 +95,38 @@ angular.module('CressApp')
                     });
 
                 return deferred.promise;
+            },
+
+            getListOfUsers: function() {
+                var deferred = $q.defer();
+                $http
+                    .get('http://localhost/cress-backend-new/User/getListOfUsers.php')
+                    .then(function(response){
+                        deferred.resolve(response.data);
+                    })
+                    .catch(function(err){
+                        console.log("Error in auth-service - getListOfUsers");
+                        console.log(err);
+                        deferred.reject("Error in auth-service - getListOfUsers");
+                    });
+
+                return deferred.promise;
+            },
+
+            addNewUser: function(user) {
+                var deferred = $q.defer();
+                $http
+                    .post('http://localhost/cress-backend-new/User/addUser.php', {user})
+                    .then(function(response){
+                        deferred.resolve(response.data);
+                    })
+                    .catch(function(err){
+                        console.log("Error in auth-service - addNewUser");
+                        console.log(err);
+                        deferred.reject("Error in auth-service - addNewUser");
+                    });
+
+                return deferred.promise;
             }
         };
 

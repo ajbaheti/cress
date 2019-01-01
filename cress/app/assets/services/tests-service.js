@@ -10,7 +10,9 @@ angular.module('CressApp')
             getTestsBySampleOrIsolateId: getTestsBySampleOrIsolateId,
             getTestMetadata: getTestMetadata,
             getTestDropdownValues: getTestDropdownValues,
-            saveTests: saveTests
+            saveTests: saveTests,
+            addTestDropdownValue: addTestDropdownValue,
+            deleteTestDropdownValue: deleteTestDropdownValue
         };
 
         return service;
@@ -74,6 +76,38 @@ angular.module('CressApp')
                     console.log("Error in tests-service - saveTests");
                     console.log(err);
                     deferred.reject("Error in tests-service - saveTests");
+                });
+
+            return deferred.promise;
+        }
+
+        function deleteTestDropdownValue(itemId, valueId) {
+            var deferred = $q.defer();
+            $http
+                .get('http://localhost/cress-backend-new/Test/deleteTestDropdownValue.php?item_id='+itemId+'&value_id='+valueId)
+                .then(function(response){
+                    deferred.resolve(response.data);
+                })
+                .catch(function(err){
+                    console.log("Error in tests-service - deleteTestDropdownValue");
+                    console.log(err);
+                    deferred.reject("Error in tests-service - deleteTestDropdownValue");
+                });
+
+            return deferred.promise;
+        }
+
+        function addTestDropdownValue(newRowObject) {
+            var deferred = $q.defer();
+            $http
+                .post('http://localhost/cress-backend-new/Test/addTestDropdownValue.php', {newRowObject})
+                .then(function(response){
+                    deferred.resolve(response.data);
+                })
+                .catch(function(err){
+                    console.log("Error in tests-service - addTestDropdownValue");
+                    console.log(err);
+                    deferred.reject("Error in tests-service - addTestDropdownValue");
                 });
 
             return deferred.promise;
