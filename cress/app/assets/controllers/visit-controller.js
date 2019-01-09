@@ -1,8 +1,54 @@
 'use strict';
 
 angular.module('CressApp')
-    .controller('VisitCtrl', function ($scope, $location, $mdMenu, $mdDialog,
+    .controller('VisitCtrl', function ($scope, $location, $mdMenu, $mdDialog, $mdToast,
             AuthService, PatientService, visitId, IsolateService, VisitService) {
+
+        if (!Array.prototype.find) {
+            Object.defineProperty(Array.prototype, 'find', {
+                value: function(predicate) {
+                    // 1. Let O be ? ToObject(this value).
+                    if (this == null) {
+                        throw new TypeError('"this" is null or not defined');
+                    }
+
+                    var o = Object(this);
+
+                    // 2. Let len be ? ToLength(? Get(O, "length")).
+                    var len = o.length >>> 0;
+
+                    // 3. If IsCallable(predicate) is false, throw a TypeError exception.
+                    if (typeof predicate !== 'function') {
+                        throw new TypeError('predicate must be a function');
+                    }
+
+                    // 4. If thisArg was supplied, let T be thisArg; else let T be undefined.
+                    var thisArg = arguments[1];
+
+                    // 5. Let k be 0.
+                    var k = 0;
+
+                    // 6. Repeat, while k < len
+                    while (k < len) {
+                        // a. Let Pk be ! ToString(k).
+                        // b. Let kValue be ? Get(O, Pk).
+                        // c. Let testResult be ToBoolean(? Call(predicate, T, « kValue, k, O »)).
+                        // d. If testResult is true, return kValue.
+                        var kValue = o[k];
+                        if (predicate.call(thisArg, kValue, k, o)) {
+                            return kValue;
+                        }
+                        // e. Increase k by 1.
+                        k++;
+                    }
+
+                    // 7. Return undefined.
+                    return undefined;
+                },
+                configurable: true,
+                writable: true
+            });
+        }
 
         $scope.visitId = visitId;
         $scope.patientId = PatientService.selectedPatientId;
@@ -26,7 +72,7 @@ angular.module('CressApp')
             .then(function(data){
                 if(data !== 'No data found') {
                     var temp = [];
-                    console.log(data);
+                    // console.log(data);
                     data.forEach(function (sample) {
                         var foundSampleId = temp.find(function (t) {
                             return sample.SampleId === t.SampleId;
@@ -41,6 +87,7 @@ angular.module('CressApp')
                         .getSampleMetadata()
                         .then(function (cols) {
                             $scope.samples = temp;
+                            $scope.sampleMetadata = cols;
                             for (var i = 0; i < temp.length; i++) {
                                 cols.forEach(function (colName) {
                                     $scope.samples[i]['' + colName.LabelText] = null;
@@ -54,9 +101,7 @@ angular.module('CressApp')
                                     }
                                 });
                             });
-
-                            // TestsService.tests = $scope.tests;
-                            console.log($scope.samples);
+                            // console.log($scope.samples);
                         })
                         .catch(function (err) {
                             console.log(err);
@@ -158,11 +203,38 @@ angular.module('CressApp')
         };
 
         $scope.saveSamples = function() {
-            console.log($scope.samples);
+            var dataToSave = [];
+            $scope.samples.forEach(function(sample){
+                $scope.sampleMetadata.forEach(function(lbl){
+                    dataToSave.push({
+                        SampleId: sample.SampleId,
+                        ItemId: lbl.ItemId,
+                        Result: sample[''+lbl.LabelText],
+                        Notation: null
+                    });
+                });
+            });
+
+            // console.log(dataToSave);
+            VisitService
+                .saveSamples(dataToSave)
+                .then(function(data){
+                    if(data === ""){
+                        // $scope.originalTests = angular.copy($scope.allTests, $scope.originalTests);
+                        showMsg("Samples saved successfully");
+                    }
+                    else {
+                        showMsg("Error saving samples");
+                    }
+                })
+                .catch(function(err){
+                    showMsg("Error saving tests");
+                    console.log(err);
+                });
         };
 
         $scope.sampleValueChanged = function(sample) {
-            console.log(sample);
+            // console.log(sample);
         };
 
         $scope.visitTypeChanged = function() {
@@ -232,5 +304,14 @@ angular.module('CressApp')
         		}
         	});
         	return tempG;
+        }
+
+        function showMsg(txt) {
+            $mdToast.show(
+                $mdToast.simple()
+                    .textContent(txt)
+                    .position('bottom right')
+                    .hideDelay(3000)
+            );
         }
     });

@@ -20,7 +20,7 @@ angular.module('CressApp')
         function getTestsBySampleOrIsolateId(id, criteria) {
             var deferred = $q.defer();
             $http
-                .get('http://localhost/cress-backend-new/Test/getTestsBySampleOrIsolateId.php?id='+id+'&criteria='+criteria)
+                .get('/cress-backend-new/Test/getTestsBySampleOrIsolateId.php?id='+id+'&criteria='+criteria)
                 .then(function (response) {
                     deferred.resolve(response.data);
                 })
@@ -36,7 +36,7 @@ angular.module('CressApp')
         function getTestMetadata() {
             var deferred = $q.defer();
             $http
-                .get('http://localhost/cress-backend-new/Test/getTestMetadata.php')
+                .get('/cress-backend-new/Test/getTestMetadata.php')
                 .then(function (response) {
                     deferred.resolve(response.data);
                 })
@@ -52,7 +52,7 @@ angular.module('CressApp')
         function getTestDropdownValues() {
             var deferred = $q.defer();
             $http
-                .get('http://localhost/cress-backend-new/Test/getTestDropdownValues.php')
+                .get('/cress-backend-new/Test/getTestDropdownValues.php')
                 .then(function (response) {
                     deferred.resolve(response.data);
                 })
@@ -68,7 +68,7 @@ angular.module('CressApp')
         function saveTests(testsObj) {
             var deferred = $q.defer();
             $http
-                .post('http://localhost/cress-backend-new/Test/saveTests.php', {testsObj})
+                .post('/cress-backend-new/Test/saveTests.php', {testsObj:testsObj})
                 .then(function(response){
                     deferred.resolve(response.data);
                 })
@@ -84,7 +84,7 @@ angular.module('CressApp')
         function deleteTestDropdownValue(itemId, valueId) {
             var deferred = $q.defer();
             $http
-                .get('http://localhost/cress-backend-new/Test/deleteTestDropdownValue.php?item_id='+itemId+'&value_id='+valueId)
+                .get('/cress-backend-new/Test/deleteTestDropdownValue.php?item_id='+itemId+'&value_id='+valueId)
                 .then(function(response){
                     deferred.resolve(response.data);
                 })
@@ -100,7 +100,7 @@ angular.module('CressApp')
         function addTestDropdownValue(newRowObject) {
             var deferred = $q.defer();
             $http
-                .post('http://localhost/cress-backend-new/Test/addTestDropdownValue.php', {newRowObject})
+                .post('/cress-backend-new/Test/addTestDropdownValue.php', {newRowObject:newRowObject})
                 .then(function(response){
                     deferred.resolve(response.data);
                 })

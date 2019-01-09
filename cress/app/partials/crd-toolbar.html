@@ -1,5 +1,5 @@
-<div>
-    <md-toolbar class="md-primary sticky-header" layout="row" md-whiteframe="2">
+<div class="sticky-header">
+    <md-toolbar class="md-primary" layout="row" md-whiteframe="2">
         <md-icon class="material-icons" ng-click="goToHome()"
                  style="margin-left:8px;cursor:pointer;outline:none;">home</md-icon>
         <div style="text-align:center;padding:16px;">ROCHESTER INSTITUTE OF TECHNOLOGY</div>
@@ -18,7 +18,7 @@
         </md-menu>
     </md-toolbar>
 
-    <div class="sticky-tabs" ng-if="showTabs">
+    <div ng-if="showTabs">
         <md-nav-bar md-no-ink-bar="disableInkBar" md-selected-nav-item="currentNavItem"
                     nav-bar-aria-label="navigation links">
             <md-nav-item md-nav-click="goTo('patients')" name="patients">Patients</md-nav-item>

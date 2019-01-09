@@ -26,7 +26,7 @@ angular.module('CressApp')
             processLogin: function() {
                 var deferred = $q.defer();
                 $http
-                    .get('http://localhost/cress-backend-new/User/login.php?name='+service.credentials.username+'&pass='+service.credentials.password)
+                    .get('/cress-backend-new/User/login.php?name='+service.credentials.username+'&pass='+service.credentials.password)
                     .then(function(response){
                         var user = {};
                         if(response.data.length === 1){
@@ -48,7 +48,7 @@ angular.module('CressApp')
             logOut: function () {
                 var deferred = $q.defer();
                 $http
-                    .get('http://localhost/cress-backend-new/User/logout.php')
+                    .get('/cress-backend-new/User/logout.php')
                     .then(function(response){
                         if(response.data === "SUCCESS"){
                             service.credentials.clear();
@@ -68,7 +68,7 @@ angular.module('CressApp')
             changePassword: function(pwdToSave) {
                 var deferred = $q.defer();
                 $http
-                    .get('http://localhost/cress-backend-new/User/changePassword.php?name='+service.user.username+'&pass='+pwdToSave)
+                    .get('/cress-backend-new/User/changePassword.php?name='+service.user.username+'&pass='+pwdToSave)
                     .then(function(response){
                         deferred.resolve(response.data);
                     })
@@ -84,7 +84,7 @@ angular.module('CressApp')
             getSession: function() {
                 var deferred = $q.defer();
                 $http
-                    .get('http://localhost/cress-backend-new/User/getSession.php')
+                    .get('/cress-backend-new/User/getSession.php')
                     .then(function(response){
                         deferred.resolve(response.data);
                     })
@@ -100,7 +100,7 @@ angular.module('CressApp')
             getListOfUsers: function() {
                 var deferred = $q.defer();
                 $http
-                    .get('http://localhost/cress-backend-new/User/getListOfUsers.php')
+                    .get('/cress-backend-new/User/getListOfUsers.php')
                     .then(function(response){
                         deferred.resolve(response.data);
                     })
@@ -116,7 +116,7 @@ angular.module('CressApp')
             addNewUser: function(user) {
                 var deferred = $q.defer();
                 $http
-                    .post('http://localhost/cress-backend-new/User/addUser.php', {user})
+                    .post('/cress-backend-new/User/addUser.php', {user:user})
                     .then(function(response){
                         deferred.resolve(response.data);
                     })

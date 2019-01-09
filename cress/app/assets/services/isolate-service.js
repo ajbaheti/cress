@@ -22,7 +22,7 @@ angular.module('CressApp')
         function findSampleById(sampleId) {
             var deferred = $q.defer();
             $http
-                .get('http://localhost/cress-backend-new/Isolate/getIsolateBySampleId.php?id=' + sampleId)
+                .get('/cress-backend-new/Isolate/getIsolateBySampleId.php?id=' + sampleId)
                 .then(function (response) {
                     deferred.resolve(response.data);
                 })
@@ -38,7 +38,7 @@ angular.module('CressApp')
         function getIsolateDropdownValues() {
             var deferred = $q.defer();
             $http
-                .get('http://localhost/cress-backend-new/Isolate/getIsolateDropdownValues.php')
+                .get('/cress-backend-new/Isolate/getIsolateDropdownValues.php')
                 .then(function (response) {
                     deferred.resolve(response.data);
                 })
@@ -54,7 +54,7 @@ angular.module('CressApp')
         function getIsolateMetadataColumns() {
             var deferred = $q.defer();
             $http
-                .get('http://localhost/cress-backend-new/Isolate/getIsolateMetadataColumns.php')
+                .get('/cress-backend-new/Isolate/getIsolateMetadataColumns.php')
                 .then(function (response) {
                     deferred.resolve(response.data);
                 })
@@ -70,7 +70,7 @@ angular.module('CressApp')
         function deleteSingleIsolate(sampleId, isolateId) {
             var deferred = $q.defer();
             $http
-                .get('http://localhost/cress-backend-new/Isolate/deleteSingleIsolate.php?sample_id='+sampleId+'&isolate_id='+isolateId)
+                .get('/cress-backend-new/Isolate/deleteSingleIsolate.php?sample_id='+sampleId+'&isolate_id='+isolateId)
                 .then(function (response) {
                     deferred.resolve(response.data);
                 })
@@ -86,7 +86,7 @@ angular.module('CressApp')
         function updateSingleIsolate(isolate) {
             var deferred = $q.defer();
             $http
-                .post('http://localhost/cress-backend-new/Isolate/updateSingleIsolate.php', {isolate})
+                .post('/cress-backend-new/Isolate/updateSingleIsolate.php', {isolate:isolate})
                 .then(function(response){
                     deferred.resolve(response.data);
                 })
@@ -102,7 +102,7 @@ angular.module('CressApp')
         function deleteIsolateDropdownValue(itemId, valueId) {
             var deferred = $q.defer();
             $http
-                .get('http://localhost/cress-backend-new/Isolate/deleteIsolateDropdownValue.php?item_id='+itemId+'&value_id='+valueId)
+                .get('/cress-backend-new/Isolate/deleteIsolateDropdownValue.php?item_id='+itemId+'&value_id='+valueId)
                 .then(function(response){
                     deferred.resolve(response.data);
                 })
@@ -118,7 +118,7 @@ angular.module('CressApp')
         function addIsolateDropdownValue(newRowObject) {
             var deferred = $q.defer();
             $http
-                .post('http://localhost/cress-backend-new/Isolate/addIsolateDropdownValue.php', {newRowObject})
+                .post('/cress-backend-new/Isolate/addIsolateDropdownValue.php', {newRowObject:newRowObject})
                 .then(function(response){
                     deferred.resolve(response.data);
                 })

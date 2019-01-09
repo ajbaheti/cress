@@ -14,7 +14,8 @@ angular.module('CressApp')
             getSamplesForVisit: getSamplesForVisit,
             getSampleMetadata: getSampleMetadata,
             addVisitDropdownValue: addVisitDropdownValue,
-            deleteVisitDropdownValue: deleteVisitDropdownValue
+            deleteVisitDropdownValue: deleteVisitDropdownValue,
+            saveSamples: saveSamples
         };
 
         return service;
@@ -22,7 +23,7 @@ angular.module('CressApp')
         function getListOfVisits(patientId) {
             var deferred = $q.defer();
             $http
-                .get('http://localhost/cress-backend-new/Visit/getVisitsForPatient.php?id='+patientId)
+                .get('/cress-backend-new/Visit/getVisitsForPatient.php?id='+patientId)
                 .then(function(response){
                     deferred.resolve(response.data);
                 })
@@ -38,7 +39,7 @@ angular.module('CressApp')
         function getVisitDropdownValues() {
             var deferred = $q.defer();
             $http
-                .get('http://localhost/cress-backend-new/Visit/getVisitDropdownValues.php')
+                .get('/cress-backend-new/Visit/getVisitDropdownValues.php')
                 .then(function (response) {
                     deferred.resolve(response.data);
                 })
@@ -54,8 +55,8 @@ angular.module('CressApp')
         function getVisitTypes() {
             var deferred = $q.defer();
             $http
-                // .get('http://localhost/cress-backend/getVisitTypes.php')
-                .get('http://googleglass.cias.rit.edu/cress-backend/getVisitTypes.php')
+                // .get('/cress-backend/getVisitTypes.php')
+                .get('/cress-backend/getVisitTypes.php')
                 .then(function(response){
                     deferred.resolve(response.data);
                 })
@@ -71,7 +72,7 @@ angular.module('CressApp')
         function getDefaultVisitColumns() {
             var deferred = $q.defer();
             $http
-                // .get('http://localhost/cress-backend/getVisitDefaultColumns.php')
+                // .get('/cress-backend/getVisitDefaultColumns.php')
                 .get('http://googleglass.cias.rit.edu/cress-backend/getVisitDefaultColumns.php')
                 .then(function(response){
                     deferred.resolve(response.data);
@@ -88,8 +89,8 @@ angular.module('CressApp')
         function getGroupingDropDownValues() {
             var deferred = $q.defer();
             $http
-                // .get('http://localhost/cress-backend/getGroupingDropdownValues.php')
-                .get('http://googleglass.cias.rit.edu/cress-backend/getGroupingDropdownValues.php')
+                // .get('/cress-backend/getGroupingDropdownValues.php')
+                .get('/cress-backend/getGroupingDropdownValues.php')
                 .then(function(response){
                     deferred.resolve(response.data);
                 })
@@ -105,8 +106,8 @@ angular.module('CressApp')
         function getVisitTypeGroupings(visitTypes) {
             var deferred = $q.defer();
             $http
-                // .get('http://localhost/cress-backend/getVisitTypeGroupings.php?idList='+visitTypes)
-                .get('http://googleglass.cias.rit.edu/cress-backend/getVisitTypeGroupings.php?idList='+visitTypes)
+                // .get('/cress-backend/getVisitTypeGroupings.php?idList='+visitTypes)
+                .get('/cress-backend/getVisitTypeGroupings.php?idList='+visitTypes)
                 .then(function(response){
                     deferred.resolve(response.data);
                 })
@@ -122,7 +123,7 @@ angular.module('CressApp')
         function getSamplesForVisit(visitId) {
             var deferred = $q.defer();
             $http
-                .get('http://localhost/cress-backend-new/Visit/getSamplesForVisit.php?id=' + visitId)
+                .get('/cress-backend-new/Visit/getSamplesForVisit.php?id=' + visitId)
                 .then(function (response) {
                     deferred.resolve(response.data);
                 })
@@ -138,7 +139,7 @@ angular.module('CressApp')
         function getSampleMetadata() {
             var deferred = $q.defer();
             $http
-                .get('http://localhost/cress-backend-new/Visit/getSamplesMetadata.php')
+                .get('/cress-backend-new/Visit/getSamplesMetadata.php')
                 .then(function (response) {
                     deferred.resolve(response.data);
                 })
@@ -154,7 +155,7 @@ angular.module('CressApp')
         function deleteVisitDropdownValue(itemId, valueId) {
             var deferred = $q.defer();
             $http
-                .get('http://localhost/cress-backend-new/Visit/deleteVisitDropdownValue.php?item_id='+itemId+'&value_id='+valueId)
+                .get('/cress-backend-new/Visit/deleteVisitDropdownValue.php?item_id='+itemId+'&value_id='+valueId)
                 .then(function(response){
                     deferred.resolve(response.data);
                 })
@@ -170,7 +171,7 @@ angular.module('CressApp')
         function addVisitDropdownValue(newRowObject) {
             var deferred = $q.defer();
             $http
-                .post('http://localhost/cress-backend-new/Visit/addVisitDropdownValue.php', {newRowObject})
+                .post('/cress-backend-new/Visit/addVisitDropdownValue.php', {newRowObject:newRowObject})
                 .then(function(response){
                     deferred.resolve(response.data);
                 })
@@ -178,6 +179,22 @@ angular.module('CressApp')
                     console.log("Error in visit-service - addVisitDropdownValue");
                     console.log(err);
                     deferred.reject("Error in visit-service - addVisitDropdownValue");
+                });
+
+            return deferred.promise;
+        }
+
+        function saveSamples(samplesObj) {
+            var deferred = $q.defer();
+            $http
+                .post('/cress-backend-new/Visit/saveSamples.php', {samplesObj:samplesObj})
+                .then(function(response){
+                    deferred.resolve(response.data);
+                })
+                .catch(function(err){
+                    console.log("Error in visit-service - saveSamples");
+                    console.log(err);
+                    deferred.reject("Error in visit-service - saveSamples");
                 });
 
             return deferred.promise;

@@ -27,7 +27,7 @@ angular.module('CressApp')
                 });
             });
 
-            console.log(dataToSave);
+            // console.log(dataToSave);
             TestsService
                 .saveTests(dataToSave)
                 .then(function(data){

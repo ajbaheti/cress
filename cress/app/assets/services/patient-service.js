@@ -22,7 +22,7 @@ angular.module('CressApp')
         function getListOfPatients() {
             var deferred = $q.defer();
             $http
-                .get('http://localhost/cress-backend-new/Subject/getPatientList.php')
+                .get('/cress-backend-new/Subject/getPatientList.php')
                 .then(function(response){
                     deferred.resolve(response.data);
                 })
@@ -38,7 +38,7 @@ angular.module('CressApp')
         function getPatientLabels() {
             var deferred = $q.defer();
             $http
-                .get('http://localhost/cress-backend-new/Subject/getPatientLabels.php')
+                .get('/cress-backend-new/Subject/getPatientLabels.php')
                 .then(function(response){
                     deferred.resolve(response.data);
                 })
@@ -54,7 +54,7 @@ angular.module('CressApp')
         function getSinglePatientInfo(patientId) {
             var deferred = $q.defer();
             $http
-                .get('http://localhost/cress-backend-new/Subject/getSinglePatientInfo.php?patient_id='+patientId)
+                .get('/cress-backend-new/Subject/getSinglePatientInfo.php?patient_id='+patientId)
                 .then(function(response){
                     deferred.resolve(response.data);
                 })
@@ -70,7 +70,7 @@ angular.module('CressApp')
         function getPatientDropdownValues() {
             var deferred = $q.defer();
             $http
-                .get('http://localhost/cress-backend-new/Subject/getPatientDropdownValues.php')
+                .get('/cress-backend-new/Subject/getPatientDropdownValues.php')
                 .then(function(response){
                     deferred.resolve(response.data);
                 })
@@ -86,7 +86,7 @@ angular.module('CressApp')
         function savePatient(patient) {
             var deferred = $q.defer();
             $http
-                .post('http://localhost/cress-backend-new/Subject/savePatient.php', {patient})
+                .post('/cress-backend-new/Subject/savePatient.php', {patient:patient})
                 .then(function(response){
                     deferred.resolve(response.data);
                 })
@@ -102,7 +102,7 @@ angular.module('CressApp')
         function deletePatientDropdownValue(itemId, valueId) {
             var deferred = $q.defer();
             $http
-                .get('http://localhost/cress-backend-new/Subject/deletePatientDropdownValue.php?item_id='+itemId+'&value_id='+valueId)
+                .get('/cress-backend-new/Subject/deletePatientDropdownValue.php?item_id='+itemId+'&value_id='+valueId)
                 .then(function(response){
                     deferred.resolve(response.data);
                 })
@@ -118,7 +118,7 @@ angular.module('CressApp')
         function addPatientDropdownValue(newRowObject) {
             var deferred = $q.defer();
             $http
-                .post('http://localhost/cress-backend-new/Subject/addPatientDropdownValue.php', {newRowObject})
+                .post('/cress-backend-new/Subject/addPatientDropdownValue.php', {newRowObject:newRowObject})
                 .then(function(response){
                     deferred.resolve(response.data);
                 })
