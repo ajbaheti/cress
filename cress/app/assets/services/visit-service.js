@@ -5,8 +5,11 @@ angular.module('CressApp')
 
         var service = {
             visitDropDownObjects: null,
+            currentVisitLabels: null,
+            getVisitLabels: getVisitLabels,
             getListOfVisits: getListOfVisits,
             getVisitDropdownValues: getVisitDropdownValues,
+            getSingleVisitInfo: getSingleVisitInfo,
             getVisitTypes: getVisitTypes,
             getDefaultVisitColumns: getDefaultVisitColumns,
             getVisitTypeGroupings: getVisitTypeGroupings,
@@ -15,10 +18,27 @@ angular.module('CressApp')
             getSampleMetadata: getSampleMetadata,
             addVisitDropdownValue: addVisitDropdownValue,
             deleteVisitDropdownValue: deleteVisitDropdownValue,
-            saveSamples: saveSamples
+            saveSamples: saveSamples,
+            saveVisit: saveVisit
         };
 
         return service;
+
+        function getVisitLabels() {
+            var deferred = $q.defer();
+            $http
+                .get('/cress-backend-new/Visit/getVisitLabels.php')
+                .then(function(response){
+                    deferred.resolve(response.data);
+                })
+                .catch(function(err){
+                    console.log("Error in visit-service - getVisitLabels");
+                    console.log(err);
+                    deferred.reject("Error in visit-service - getVisitLabels");
+                });
+
+            return deferred.promise;
+        }
 
         function getListOfVisits(patientId) {
             var deferred = $q.defer();
@@ -34,6 +54,22 @@ angular.module('CressApp')
                 });
 
             return deferred.promise
+        }
+
+        function getSingleVisitInfo(visitId) {
+            var deferred = $q.defer();
+            $http
+                .get('/cress-backend-new/Visit/getSingleVisitInfo.php?visit_id='+visitId)
+                .then(function(response){
+                    deferred.resolve(response.data);
+                })
+                .catch(function(err){
+                    console.log("Error in visit-service - getSingleVisitInfo");
+                    console.log(err);
+                    deferred.reject("Error in visit-service - getSingleVisitInfo");
+                });
+
+            return deferred.promise;
         }
 
         function getVisitDropdownValues() {
@@ -67,6 +103,22 @@ angular.module('CressApp')
                 });
 
             return deferred.promise
+        }
+
+        function saveVisit(visitObj) {
+            var deferred = $q.defer();
+            $http
+                .post('/cress-backend-new/Visit/saveVisit.php', {visit:visitObj})
+                .then(function(response){
+                    deferred.resolve(response.data);
+                })
+                .catch(function(err){
+                    console.log("Error in visit-service - saveVisit");
+                    console.log(err);
+                    deferred.reject("Error in visit-service - saveVisit");
+                });
+
+            return deferred.promise;
         }
 
         function getDefaultVisitColumns() {

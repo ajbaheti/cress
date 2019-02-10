@@ -113,7 +113,7 @@ angular.module('CressApp')
             });
 
         // visit columns to display
-        $scope.visitDefaultColumns = ['visitType', 'visit_date']; //visitId is shown by default
+        $scope.visitDefaultColumns = ['visit_date']; //visitId is shown by default
 
         // get visits information for patient
         VisitService
@@ -155,6 +155,40 @@ angular.module('CressApp')
             .catch(function(err){
                 showMsg("Something went wrong, please try again later");
                 console.log(err);
+            });
+
+        VisitService
+            .getVisitLabels()
+            .then(function(labels){
+                if(labels !== 'No labels found'){
+                    VisitService.currentVisitLabels = labels;
+                }
+            })
+            .catch(function(err){
+                console.log(err);
+            });
+
+        VisitService
+            .getVisitDropdownValues()
+            .then(function(data){
+                if(data !== 'No data found'){
+                    var visitLabelIds = data.map(function(obj){
+                        return {lbl_text: obj.LabelText};
+                    });
+                    var uniqueLabels = removeDuplicates(visitLabelIds, "lbl_text");
+
+                    var visitDropDownObjects = {};
+                    //for each label (drop down), create separate array with values
+                    uniqueLabels.forEach(function(lbl){
+                        visitDropDownObjects[''+lbl.lbl_text] = data.filter(function(obj){
+                            return obj.LabelText === lbl.lbl_text;
+                        });
+                    });
+                    VisitService.visitDropDownObjects = visitDropDownObjects;
+                }
+            })
+            .catch(function(err){
+                console.log("Error fetching drop down values");
             });
 
         $scope.savePatient = function() {
@@ -202,14 +236,14 @@ angular.module('CressApp')
                     });
             }
             else {
-                showMsg("Something went wrong, please try again later");
+                showMsg("Enter all required fields");
                 console.log("Enter all required fields");
             }
         };
 
         $scope.goToVisit = function(visit, ev) {
             $mdDialog.show({
-                locals:{visitId: visit.visitId},
+                locals:{visit: visit},
                 templateUrl: 'app/partials/visit.html',
                 controller: 'VisitCtrl',
                 parent: angular.element(document.body),
@@ -238,5 +272,13 @@ angular.module('CressApp')
             });
 
             return !!x;
+        }
+
+        function removeDuplicates(myArr, prop) {
+            return myArr.filter(function(obj, pos, arr){
+                return arr.map(function(mapObj){
+                    return mapObj[prop];
+                }).indexOf(obj[prop]) === pos;
+            });
         }
     });

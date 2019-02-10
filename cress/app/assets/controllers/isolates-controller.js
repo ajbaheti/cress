@@ -84,7 +84,7 @@ angular.module('CressApp')
                     .findSampleById($scope.sampleId)
                     .then(function(isolatesFound){
                         if(isolatesFound === 'No match found'){
-                            console.log("No data found");
+                            // console.log("No data found");
                             showMsg("No data found");
                         }
                         else {

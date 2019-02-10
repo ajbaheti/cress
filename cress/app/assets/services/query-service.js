@@ -13,7 +13,7 @@ angular.module('CressApp')
             var deferred = $q.defer();
             $http
                 // .get('/cress-backend/getQueryFields.php')
-                .get('/cress-backend/getQueryFields.php')
+                .get('/cress-backend-new/getQueryFields.php')
                 .then(function(response){
                     deferred.resolve(response.data);
                 })

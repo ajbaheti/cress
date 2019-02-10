@@ -67,7 +67,7 @@ angular.module('CressApp')
                     }
                 })
                 .catch(function(err){
-                    console.log("Error deleting row");
+                    // console.log("Error deleting row");
                     showMsg("Something went wrong, please try again later");
                 });
         };
@@ -111,8 +111,8 @@ angular.module('CressApp')
         };
 
         $scope.deleteUser = function(user, index) {
-            console.log(user);
-            console.log(index);
+            // console.log(user);
+            // console.log(index);
         };
 
         $scope.addNewUser = function() {

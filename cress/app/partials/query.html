@@ -18,7 +18,7 @@
                 <div class="query-heading">All Fields</div>
                 <md-chips ng-model="allFields" readonly=true md-removable=false>
                     <md-chip-template>
-                        <span>{{$chip.field_name}}</span>
+                        <span>{{$chip.FieldName}}</span>
                         <md-icon class="material-icons" ng-click="addToQueryFields($chip)"
                                  style="outline:none;cursor:pointer;">add</md-icon>
                     </md-chip-template>
@@ -29,7 +29,7 @@
                 <div class="query-heading">Fields to Query</div>
                 <md-chips ng-model="queryFields" readonly=true md-removable=true md-on-remove="removeFromQueryFields($chip)">
                     <md-chip-template>
-                        <span>{{$chip.field_name}}</span>
+                        <span>{{$chip.FieldName}}</span>
                     </md-chip-template>
                 </md-chips>
             </md-content>
@@ -41,7 +41,7 @@
                 <label style="width:100px;margin-top:7px;font-weight:500;">Filtered On: </label>
                 <md-select ng-model="row.filterValue" ng-change="filterValueSelected(row)" aria-label="query filter"
                            style="margin:0 8px;width:200px;" ng-disabled="row.disableFilter">
-                    <md-option ng-repeat="af in allFields" ng-value="af">{{af.field_name}}</md-option>
+                    <md-option ng-repeat="af in allFields" ng-value="af">{{af.FieldName}}</md-option>
                 </md-select>
                 <label ng-if="row.showCondition" style="width:32px;margin:7px 0 0 8px;font-weight:500;">is: </label>
                 <md-select ng-if="row.showCondition" ng-model="row.filterCondition" aria-label="query condition"
@@ -65,6 +65,32 @@
             <md-button class="md-warn md-raised" ng-click="reset()">Reset</md-button>
         </div>
 
+        <md-toolbar ng-if="searchClicked" md-colors="{'color':'grey-700'}" style="background-color: transparent">
+            <div class="md-toolbar-tools">
+                <div layout="column" flex>
+                    <h2>Result</h2>
+                </div>
+            </div>
+        </md-toolbar>
+        <md-table-container ng-if="searchClicked">
+            <table md-table>
+                <thead md-head>
+                    <tr md-row>
+                        <th md-column ng-repeat="field in queryFields">{{field.FieldName}}</th>
+                    </tr>
+                </thead>
+                <tbody md-body ng-if="searchResult.length === 0">
+                <tr md-row ng-show="searchResult.length === 0">
+                    <td md-cell colspan="{{queryFields.length}}">No data found</td>
+                </tr>
+                </tbody>
+                <tbody md-body ng-if="searchResult.length > 0">
+                <tr md-row ng-repeat="reslt in searchResult track by $index">
+                    <td md-cell>{{reslt}}</td>
+                </tr>
+                </tbody>
+            </table>
+        </md-table-container>
     </md-content>
 
 </div>

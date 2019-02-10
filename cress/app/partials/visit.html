@@ -1,7 +1,8 @@
 <md-dialog style="width:90%;max-height:95%;max-width:90%;">
     <md-toolbar>
         <div class="md-toolbar-tools">
-            <h2>Visit Date - {{visit.visit_date}} / Patient Id - {{patientId}}</h2>
+            <h2><span ng-if="visitDate">Visit Date - {{visitDate | date: 'yyyy-M-d'}} / </span>
+                Patient Id - {{patientId}} / Visit Id - {{visitId}}</h2>
             <span flex></span>
             <md-button ng-click="cancel()">
                 <md-icon class="material-icons" aria-label="Close dialog">close</md-icon>
@@ -20,12 +21,13 @@
                         </div>
                     </div>
                 </md-toolbar>
-                <div layout="row" style="padding:16px 16px 0 16px;">
+
+                <!--<div layout="row" style="padding:16px 16px 0 16px;">
                     <div layout="column" flex="40">
                         <div>Visit Id: {{visit.visit_id}}</div>
                         <div>Visit Date: {{visit.visit_date}}</div>
                         <div>Patient Id: {{patientId}}</div>
-                        <md-input-container>
+                        &lt;!&ndash;<md-input-container>
                             <label>Visit Types</label>
                             <md-select ng-model="visit.selectedVisitType" multiple="true" ng-change="visitTypeChanged()">
                                 <md-option ng-repeat="vt in listOfVisitTypes" ng-value="vt">
@@ -38,9 +40,9 @@
                                     <span>{{$chip.visit_type_name}}</span>
                                 </md-chip-template>
                             </md-chips>
-                        </md-input-container>
+                        </md-input-container>&ndash;&gt;
                     </div>
-                    <div flex="60" layout="column" ng-if="allGroupings.length > 0" style="padding:0 8px;margin-left:8px;">
+                    &lt;!&ndash;<div flex="60" layout="column" ng-if="allGroupings.length > 0" style="padding:0 8px;margin-left:8px;">
                         <div ng-repeat="groups in allGroupings" layout="column">
                             <div class="grouping_header">{{groups.group_title}}</div>
                             <md-input-container ng-repeat="obj in groups.groupingFields" class="hide-validation-error"
@@ -66,11 +68,91 @@
                                 </div>
                             </md-input-container>
                         </div>
-                    </div>
+                    </div>&ndash;&gt;
                 </div>
+
                 <div layout="row" style="padding: 0 8px 16px 8px;">
                     <md-button class="md-raised md-primary" ng-click="saveVisit()">Save</md-button>
+                </div>-->
+
+                <div layout="row" layout-xs="column" style="padding:0 8px;margin-top:8px;">
+                    <div layout="column" flex="50" flex-xs="100" class="md-padding">
+                        <md-input-container ng-repeat="obj in leftLabelList" class="hide-validation-error">
+                            <label class="label-overflow">{{obj.DisplayName}}</label>
+                            <input ng-model="visitInfoObj[''+obj.LabelText]"
+                                   ng-if="obj.LabelType === 'single' && obj.IsRequired === '0'" />
+                            <input ng-model="visitInfoObj[''+obj.LabelText]"
+                                   ng-if="obj.LabelType === 'single' && obj.IsRequired === '1'" required/>
+                            <md-datepicker ng-model="visitInfoObj[''+obj.LabelText]"
+                                           ng-if="obj.LabelType === 'date' && obj.IsRequired === '0'"></md-datepicker>
+                            <md-datepicker ng-model="visitInfoObj[''+obj.LabelText]" required
+                                           ng-if="obj.LabelType === 'date' && obj.IsRequired === '1'"></md-datepicker>
+                            <md-select ng-model="visitInfoObj[''+obj.LabelText]"
+                                       ng-if="obj.LabelType === 'multiple' && obj.IsRequired === '0'">
+                                <md-option ng-repeat="a in visitDropDownValues[''+obj.LabelText]" ng-value="a.Value">{{a.Value}}</md-option>
+                            </md-select>
+                            <md-select ng-model="visitInfoObj[''+obj.LabelText]"
+                                       ng-if="obj.LabelType === 'multiple' && obj.IsRequired === '1'" required>
+                                <md-option ng-repeat="a in visitDropDownValues[''+obj.LabelText]" ng-value="a.Value">{{a.Value}}</md-option>
+                            </md-select>
+                            <md-select ng-model="visitInfoObj[''+obj.LabelText]" multiple="true"
+                                       ng-if="obj.LabelType === 'multiselect' && obj.IsRequired === '0'">
+                                <md-option ng-repeat="a in visitDropDownValues[''+obj.LabelText]" ng-value="a.Value">{{a.Value}}</md-option>
+                            </md-select>
+                            <md-select ng-model="visitInfoObj[''+obj.LabelText]" multiple="true"
+                                       ng-if="obj.LabelType === 'multiselect' && obj.IsRequired === '1'" required>
+                                <md-option ng-repeat="a in visitDropDownValues[''+obj.LabelText]" ng-value="a.Value">{{a.Value}}</md-option>
+                            </md-select>
+                            <md-chips ng-model="visitInfoObj[''+obj.LabelText]" md-removable="true" readonly="true"
+                                      ng-if="obj.LabelType === 'multiselect' && visitInfoObj[''+obj.LabelText].length > 0">
+                                <md-chip-template>
+                                    <span>{{$chip}}</span>
+                                </md-chip-template>
+                            </md-chips>
+                        </md-input-container>
+                    </div>
+                    <div layout="column" flex="50" flex-xs="100" class="md-padding">
+                        <md-input-container ng-repeat="obj in rightLabelList" class="hide-validation-error">
+                            <label class="label-overflow">{{obj.DisplayName}}</label>
+                            <input ng-model="visitInfoObj[''+obj.LabelText]"
+                                   ng-if="obj.LabelType === 'single' && obj.IsRequired === '0'" />
+                            <input ng-model="visitInfoObj[''+obj.LabelText]"
+                                   ng-if="obj.LabelType === 'single' && obj.IsRequired === '1'" required/>
+                            <md-datepicker ng-model="visitInfoObj[''+obj.LabelText]"
+                                           ng-if="obj.LabelType === 'date' && obj.IsRequired === '0'"></md-datepicker>
+                            <md-datepicker ng-model="visitInfoObj[''+obj.LabelText]" required
+                                           ng-if="obj.LabelType === 'date' && obj.IsRequired === '1'"></md-datepicker>
+                            <md-select ng-model="visitInfoObj[''+obj.LabelText]"
+                                       ng-if="obj.LabelType === 'multiple' && obj.IsRequired === '0'">
+                                <md-option ng-repeat="a in visitDropDownValues[''+obj.LabelText]" ng-value="a.Value">{{a.Value}}</md-option>
+                            </md-select>
+                            <md-select ng-model="visitInfoObj[''+obj.LabelText]" required
+                                       ng-if="obj.LabelType === 'multiple' && obj.IsRequired === '1'">
+                                <md-option ng-repeat="a in visitDropDownValues[''+obj.LabelText]" ng-value="a.Value">{{a.Value}}</md-option>
+                            </md-select>
+                            <md-select ng-model="visitInfoObj[''+obj.LabelText]" multiple="true"
+                                       ng-if="obj.LabelType === 'multiselect' && obj.IsRequired === '0'">
+                                <md-option ng-repeat="a in visitDropDownValues[''+obj.LabelText]" ng-value="a.Value">{{a.Value}}</md-option>
+                            </md-select>
+                            <md-select ng-model="visitInfoObj[''+obj.LabelText]" multiple="true"
+                                       ng-if="obj.LabelType === 'multiselect' && obj.IsRequired === '1'" required>
+                                <md-option ng-repeat="a in visitDropDownValues[''+obj.LabelText]" ng-value="a.Value">{{a.Value}}</md-option>
+                            </md-select>
+                            <md-chips ng-model="visitInfoObj[''+obj.LabelText]" md-removable="true" readonly="true"
+                                      ng-disabled=true ng-if="obj.LabelType === 'multiselect' && visitInfoObj[''+obj.LabelText].length > 0">
+                                <md-chip-template style="outline:none;">
+                                    <span>{{$chip}}</span>
+                                </md-chip-template>
+                            </md-chips>
+                        </md-input-container>
+                    </div>
                 </div>
+
+                <div layout="row" layout-xs="column" style="padding:0 8px;">
+                    <md-button class="md-primary md-raised" ng-click="saveVisit()">Save</md-button>
+                    <!--<div layout-align="end end" style="margin-top:16px;"> * marked fields are required</div>-->
+                </div>
+
             </div>
 
             <div layout="column" style="margin-top:16px;padding:16px;" md-whiteframe="2dp">

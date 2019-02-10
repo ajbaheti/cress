@@ -2,7 +2,7 @@
 
 angular.module('CressApp')
     .controller('VisitCtrl', function ($scope, $location, $mdMenu, $mdDialog, $mdToast,
-            AuthService, PatientService, visitId, IsolateService, VisitService) {
+            AuthService, PatientService, visit, IsolateService, VisitService) {
 
         if (!Array.prototype.find) {
             Object.defineProperty(Array.prototype, 'find', {
@@ -50,10 +50,44 @@ angular.module('CressApp')
             });
         }
 
-        $scope.visitId = visitId;
+        $scope.visitId = visit.visitId;
+        $scope.visitDate = visit.visit_date;
         $scope.patientId = PatientService.selectedPatientId;
         $scope.inputVal = null;
         $scope.groupingDropdownObjects = {};
+        $scope.visitInfoObj = {};
+
+        $scope.visitDropDownValues = VisitService.visitDropDownObjects;
+
+        //get list of labels to be shown on left and right
+        $scope.leftLabelList = VisitService.currentVisitLabels.leftLabels;
+        $scope.rightLabelList = VisitService.currentVisitLabels.rightLabels;
+
+        // create an empty model for each field being displayed in html
+        $scope.leftLabelList.forEach(function(lbl){
+            $scope.visitInfoObj[''+lbl.LabelText] = null;
+        });
+        $scope.rightLabelList.forEach(function(lbl){
+            $scope.visitInfoObj[''+lbl.LabelText] = null;
+        });
+
+        //get selected patient information
+        VisitService
+            .getSingleVisitInfo($scope.visitId)
+            .then(function(visit){
+                if(visit.length > 0){
+                    // then assign model values in array
+                    visit.forEach(function(row){
+                        $scope.visitInfoObj[''+row.Labeltext] = row.Result;
+                    });
+                } else {
+                    showMsg("Visit information not found");
+                }
+            })
+            .catch(function(err){
+                console.log(err);
+                showMsg("Something went wrong, please try again later");
+            });
 
         // get all visits types for drop down
         /*VisitService
@@ -285,7 +319,53 @@ angular.module('CressApp')
         };
 
         $scope.saveVisit = function() {
-            console.log($scope.visit);
+            var allRequiredEntered = true;
+            var dataToSave = [];
+            $scope.leftLabelList.forEach(function(lbl){
+                dataToSave.push({
+                    VisitId: $scope.visitId,
+                    ItemId: lbl.ItemId,
+                    Result: $scope.visitInfoObj[''+lbl.LabelText],
+                    Notation: null
+                });
+                if(lbl.IsRequired === '1' && !$scope.visitInfoObj[''+lbl.LabelText]) {
+                    allRequiredEntered = false;
+                }
+            });
+            $scope.rightLabelList.forEach(function(lbl){
+                dataToSave.push({
+                    VisitId: $scope.visitId,
+                    ItemId: lbl.ItemId,
+                    Result: $scope.visitInfoObj[''+lbl.LabelText],
+                    Notation: null
+                });
+                if(lbl.IsRequired === '1' && !$scope.visitInfoObj[''+lbl.LabelText]) {
+                    allRequiredEntered = false;
+                }
+            });
+            if(allRequiredEntered){
+                VisitService
+                    .saveVisit(dataToSave)
+                    .then(function(data){
+                        // console.log(data);
+                        if(data === ""){
+                            showMsg("Visit saved successfully");
+                            // console.log("Visit saved successfully");
+                        }
+                        else {
+                            showMsg("Error saving Visit");
+                            console.log("Error saving Visit");
+                        }
+                    })
+                    .catch(function(err){
+                        showMsg("Error saving Visit");
+                        console.log("error in saving Visit");
+                    });
+            }
+            else {
+                showMsg("Enter all required fields");
+                console.log("Enter all required fields");
+            }
         };
 
         function removeDuplicates(myArr, prop) {

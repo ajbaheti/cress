@@ -117,7 +117,7 @@
                     </tr>-->
                     <tr md-row>
                         <th md-column>Visit Date</th>
-                        <th md-column>Visit Type</th>
+                        <!--<th md-column>Visit Type</th>-->
                         <th md-column>Visit Id</th>
                     </tr>
                 </thead>
@@ -138,7 +138,7 @@
                     </tr>-->
                     <tr md-row ng-repeat="visit in visits track by $index">
                         <td md-cell>{{visit.visit_date | date: 'yyyy-mm-dd'}}</td>
-                        <td md-cell>{{visit.visitType}}</td>
+                        <!--<td md-cell>{{visit.visitType}}</td>-->
                         <td md-cell style="outline:none;cursor:pointer;color:blue;text-decoration:underline;"
                             ng-click="goToVisit(visit, $event)">{{visit.visitId}}</td>
                     </tr>
